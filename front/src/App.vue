@@ -1,9 +1,9 @@
 <template>
-<div class="container-fluid">
-    <Header />
-    <Body />
+  <div class="container-fluid">
+    <Header :connected="connected" @connect="connect" @registration="registration" />
+    <Body :registred="registred" />
     <Footer />
-    </div>
+  </div>
 </template>
 
 
@@ -19,6 +19,21 @@ export default {
     Header,
     Body,
     Footer
+  },
+  data(){
+    return{
+      connected:false,
+      registred:false
+    }
+  }
+  ,
+  methods:{
+    registration:function(){
+      this.registred=!this.registred
+    },
+    connect:function(){
+      this.connected=!this.connected
+    }
   }
 }
 </script>
