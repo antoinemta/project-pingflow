@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
-    <Header @registration="registration" />
-    <Body :connected="connected" />
+    <Header @connect="connect" @search="search"/>
+    <Body :connected="connected" :searched="searched"/>
     <Footer />
   </div>
 </template>
@@ -22,17 +22,23 @@ export default {
   },
   data(){
     return{
-      connected:true
+      connected:true,
+      searched:""
     }
   }
   ,
   methods:{
-   registration:function (){
+   connect:function (){
      this.connected=false
-     alert(this.connected)
      
      
+     
+   },
+   search:function(event){
+     this.connected=true
+      this.searched=event
    }
+   
   }
 }
 </script>

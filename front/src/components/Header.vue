@@ -13,7 +13,7 @@
       <input type="text" class="ml-2" />
       <input type="password" class="ml-3" />
       <button class="btn btn-success ml-4">Go</button>
-      <button class="btn btn-success ml-4" @click="registration">Log in</button>
+      <button class="btn btn-success ml-4" @click="connect">Log in</button>
     </div>
   </header>
 </template>
@@ -30,9 +30,6 @@
     }
   },
   methods:{
-    registration: function(){
-      this.$emit('registration')
-    },
     connect: function(){
       this.$emit('connect');
     },
