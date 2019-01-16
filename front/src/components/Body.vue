@@ -1,27 +1,24 @@
 <template>
-  <section class="row body">
-    <!--<div class="col-12" v-if="!registred">
-    <div id="map"></div>
-    </div>-->
-    <div class="col-12" v-if="searched">
-      <div class="col-12 d-flex justify-content-center">
-        {{country}}
+  <section class="row body" v-if="connected">
+    <div class="col-12" >
+      <div class="col-12 mt-4 mb-3 d-flex justify-content-center py-2">
+        <h1>{{country}}</h1>
       </div>
-      <div class="col-12 d-flex justify-content-center">
-        {{city}}
+      <div class="col-12 d-flex justify-content-center py-2">
+        <h4>{{state}}</h4>
       </div>
-      <div class="col-12 d-flex justify-content-center">
-        {{state}}
+      <div class="col-12 d-flex justify-content-center py-2">
+        <h6>{{city}}</h6>
       </div>
     </div>
     <div class="col-12 containerMap">
     <div id="map"></div>
      
     </div>  
-    <div class="col-12 bg-success">
-        {{state}}
+    <div class="col-12 d-flex justify-content-center">
+        Join this city into your favorites ! <button>Go</button>
       </div> 
-   
+   </div>
   </section>
 </template>
 
@@ -36,7 +33,7 @@ export default {
   
   name: 'Body',
   props: {
-    registred:Boolean,
+    connected:Boolean,
     searched:String
   },
   data(){return{
@@ -78,7 +75,7 @@ export default {
     fetch("http://api.zippopotam.us/fr/59126")
       .then(results => results.json()) // conversion du résultat en JSON
       .then(data => {
-        alert(data);
+      
         this.city=data.places[0]['place name']
         this.country=data.country;
         this.state=data.places[0].state;

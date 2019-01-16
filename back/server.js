@@ -1,28 +1,28 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const bodyParser = require('body-parser');
-const request = require('request');
-const passport = require('passport');
-const cors = require('cors');
-const { PORT_NUMBER, client_id, client_secret } = require('./conf');
+const bodyParser = require("body-parser");
+const request = require("request");
+const passport = require("passport");
+const cors = require("cors");
+const { PORT_NUMBER, client_id, client_secret } = require("./conf");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post('/informationsCity', (req, res) => {
+app.post("/informationsCity", (req, res) => {
   let capital = req.body.capital;
   let infosCity = undefined;
   request(
     {
-      url: 'https://api.foursquare.com/v2/venues/explore',
-      method: 'GET',
+      url: "https://api.foursquare.com/v2/venues/explore",
+      method: "GET",
       qs: {
         client_id: `${client_id}`,
         client_secret: `${client_secret}`,
         near: `${capital}`,
-        query: 'monuments',
-        v: '20180323',
+        query: "monuments",
+        v: "20180323",
         limit: 10
       }
     },
