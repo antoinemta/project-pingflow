@@ -61,37 +61,39 @@ export default {
 
       /* This is a api to recup the datas of city */
 
-      fetch(`http://api.zippopotam.us/fr/`)
+      fetch(`http://api.zippopotam.us/fr/${this.searched}`)
       .then(results => results.json())
       .then(data => {
       
         this.city=data.places[0]['place name'];
         this.country=data.country;
         this.state=data.places[0].state;
-});
-
-    this.map = L.map("map", {
-      center: [10.0, 5.0],
-      minZoom: 2,
-      zoom: 2
-    });
+        let lat = data.places[0].latitude;
+        let lng = data.places[0].longitude;
+        this.map = L.map("map", {
+        center: [10.0, 5.0],
+        minZoom: 2,
+        zoom: 2
+      });
     
-    let basemap = L.tileLayer(
-      "http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
-      {
+      let basemap = L.tileLayer(
+        "http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
+        {
         maxZoom: 20,
         subdomains: ["mt0", "mt1", "mt2", "mt3"]
-      }
-    );
+        }
+      );
 
-    this.map.addLayer(basemap);
+      this.map.addLayer(basemap);
 
-    navigator.geolocation.getCurrentPosition(position => {
-      let lat = position.coords.latitude;
-      let lng = position.coords.longitude;
+    
+      
       L.marker([lat, lng]).addTo(this.map);
       this.map.setView([lat, lng], 16);
-    });
+});
+
+    
+   
 
     }
   },
@@ -100,7 +102,6 @@ export default {
     this.initMap()
   },
   updated(){
-      alert(this.searched)
        this.initMap()
   }
 
