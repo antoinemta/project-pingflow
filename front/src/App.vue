@@ -1,17 +1,39 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container-fluid">
+    <Header :connected="connected" @connect="connect" @registration="registration" />
+    <Body :registred="registred" />
+    <Footer />
   </div>
 </template>
 
+
+
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from './components/Header.vue'
+import Body from './components/Body.vue'
+import Footer from './components/Footer.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Header,
+    Body,
+    Footer
+  },
+  data(){
+    return{
+      connected:false,
+      registred:false
+    }
+  }
+  ,
+  methods:{
+    registration:function(){
+      this.registred=!this.registred
+    },
+    connect:function(){
+      this.connected=!this.connected
+    }
   }
 }
 </script>
