@@ -15,7 +15,7 @@
     <div class="col-12 containerMap">
       <div id="map"></div>
     </div>  
-    <div class="col-12 d-flex justify-content-center">
+    <div class="col-12 d-flex justify-content-center mt-5">
       Join this city into your favorites ! <button class="ml-3 btn btn-success">Go</button>
     </div> 
   </div>
