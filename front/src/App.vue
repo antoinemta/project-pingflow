@@ -6,7 +6,8 @@
   </div>
 </template>
 
-
+<!-- I haven't yet used the routes, 
+so I use props to change components . -->
 
 <script>
 import Header from './components/Header.vue'
@@ -30,15 +31,11 @@ export default {
   methods:{
    connect:function (){
      this.connected=false
-     
-     
-     
    },
    search:function(event){
      this.connected=true
       this.searched=event
    }
-   
   }
 }
 </script>
