@@ -1,5 +1,6 @@
 <template>
   <section class="row body">
+    <span class="d-none">{{ searched }}</span>
     <div class="col-12"  v-if="connected">
       <div class="col-12 mt-4 mb-3 d-flex justify-content-center py-2">
         <h1>{{country}}</h1>
@@ -27,8 +28,8 @@
     </div>
   </div>
 </section>
-</template>
 
+</template>
 
 
 
@@ -40,6 +41,7 @@ import L from "leaflet";
 
 export default {
 
+
   name: 'Body',
   props: {
     connected:Boolean,
@@ -48,7 +50,9 @@ export default {
   data(){return{
     country:"",
     city:"",
-    state:""
+    state:"",
+    lat:0,
+    lng:0
     }
   },
   methods:{
@@ -57,11 +61,11 @@ export default {
 
       /* This is a api to recup the datas of city */
 
-      fetch("http://api.zippopotam.us/fr/59126")
+      fetch(`http://api.zippopotam.us/fr/`)
       .then(results => results.json())
       .then(data => {
       
-        this.city=data.places[0]['place name']
+        this.city=data.places[0]['place name'];
         this.country=data.country;
         this.state=data.places[0].state;
 });
@@ -88,17 +92,21 @@ export default {
       L.marker([lat, lng]).addTo(this.map);
       this.map.setView([lat, lng], 16);
     });
-      
+
     }
   },
   mounted() {
+    
     this.initMap()
   },
   updated(){
+      alert(this.searched)
        this.initMap()
   }
 
 }
+
+
 </script>
 
 
