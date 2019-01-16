@@ -30,7 +30,8 @@ app.post("/informationsCity", (req, res) => {
       if (err) {
         console.error(err);
       } else {
-        infosCity = JSON.parse(body).response.groups[0].items;
+        infosCity = JSON.parse(body).response.groups;
+        console.log(infosCity);
         res.status(200).send(infosCity);
       }
     }
