@@ -11,10 +11,16 @@ const jwtSecret = 'YOUR SECRET';
 
 const PORT_NUMBER = 'YOUR PORT NUMBER';
 
+const client_id = '';
+
+const client_secret = '';
+
 module.exports = {
   jwtSecret,
   DBurl,
   saltRounds,
   PORT_NUMBER,
-  connection
+  connection,
+  client_id,
+  client_secret
 };
