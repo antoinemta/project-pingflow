@@ -16,15 +16,15 @@
       <div id="map"></div>
     </div>  
     <div class="col-12 d-flex justify-content-center">
-      Join this city into your favorites ! <button>Go</button>
+      Join this city into your favorites ! <button class="ml-3 btn btn-success">Go</button>
     </div> 
   </div>
   <div class="col-12 containerLogin" v-else>
     <div class="col-3 border px-5 pb-5 textAlignCenter">
-      <div class="col-12 mb-4">Log in</div>
+      <div class="col-12 mb-4 pt-3">Log in</div>
       <input class="col-12 mb-4" type="text" />
       <input class="col-12 mb-4" type="text" />
-      <button>Go</button>
+      <button class="btn btn-success">Go</button>
     </div>
   </div>
 </section>
@@ -37,10 +37,7 @@
 
 import L from "leaflet";
 
-
-
 export default {
-
 
   name: 'Body',
   props: {
@@ -56,8 +53,7 @@ export default {
     }
   },
   methods:{
-
-    initMap:function () {
+      initMap:function () {
 
       /* This is a api to recup the datas of city */
 
@@ -86,15 +82,9 @@ export default {
 
       this.map.addLayer(basemap);
 
-    
-      
       L.marker([lat, lng]).addTo(this.map);
       this.map.setView([lat, lng], 16);
-});
-
-    
-   
-
+    });
     }
   },
   mounted() {
