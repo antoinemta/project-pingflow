@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md-6 textAlignRight pr-5"><h1>Find your city !</h1></div>
       
-      <div class="col px-5"><input class="w-100"></div>
+      <div class="col px-5 d-flex"><input type="text" class="w-100" v-model="searched"><button class="btn btn-success ml-4" @click="search">Search</button></div>
       </div>
     </div>
     <div class="col px-0 pr-5 textAlignRight">
@@ -26,12 +26,20 @@
   props:{
     connected:Boolean
   },
+  data(){
+    return{
+      searched:""
+    }
+  },
   methods:{
     registration: function(){
       this.$emit('registration')
     },
     connect: function(){
       this.$emit('connect');
+    },
+    search: function(){
+      this.$emit('search',this.searched);
     }
   }
 }

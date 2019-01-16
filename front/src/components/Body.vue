@@ -1,9 +1,9 @@
 <template>
   <section class="row body">
-    <div class="col-12">
+    <div class="col-12" v-if="registred">
     <div id="map"></div>
     </div>
-    </div>
+    <div>{{ searched }}</div>
   </section>
 </template>
 
@@ -11,13 +11,18 @@
 
 import L from "leaflet";
 
+
 export default {
+
+  
   
   name: 'Body',
   props: {
-    registred:Boolean
+    registred:Boolean,
+    searched:String
   },
   mounted() {
+    
     var vm = this;
 
     vm.map = L.map("map", {
@@ -45,13 +50,15 @@ export default {
   }
 
 }
+
+
+
 </script>
 
 
 <style scoped>
 .body {
  height:80vh;
- background-color:red;
 }
 
 #map
