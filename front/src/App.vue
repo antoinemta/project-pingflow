@@ -1,17 +1,41 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container-fluid">
+    <Header @connect="connect" @search="search"/>
+    <Body :connected="connected" :searched="searched"/>
+    <Footer />
   </div>
 </template>
 
+<!-- I haven't yet used the routes, 
+so I use props to change components . -->
+
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Header from './components/Header.vue'
+import Body from './components/Body.vue'
+import Footer from './components/Footer.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Header,
+    Body,
+    Footer
+  },
+  data(){
+    return{
+      connected:true,
+      searched:""
+    }
+  }
+  ,
+  methods:{
+   connect:function (){
+     this.connected=false
+   },
+   search:function(event){
+     this.connected=true
+      this.searched=event
+   }
   }
 }
 </script>
