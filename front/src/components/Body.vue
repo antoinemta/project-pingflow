@@ -1,6 +1,6 @@
 <template>
-  <section class="row body">
-    <span class="d-none">{{ searched }}</span>
+  <section class="row body bg-info">
+    <span class="d-none">{{ searched }}{{ selected }}</span>
     <div class="col-12"  v-if="connected">
       <div class="col-12 mt-4 mb-3 d-flex justify-content-center py-2">
         <h1>{{country}}</h1>
@@ -20,7 +20,7 @@
     </div> 
   </div>
   <div class="col-12 containerLogin" v-else>
-    <div class="col-3 border px-5 pb-5 textAlignCenter">
+    <div class="col-3 border px-5 pb-5 textAlignCenter bg-light">
       <div class="col-12 mb-4 pt-3">Log in</div>
       <input class="col-12 mb-4" type="text" />
       <input class="col-12 mb-4" type="text" />
@@ -35,6 +35,7 @@
 
 <script>
 
+import io from "socket.io-client";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -43,57 +44,52 @@ export default {
   name: 'Body',
   props: {
     connected:Boolean,
-    searched:String
+    searched:String,
+    selected:String
   },
   data(){return{
     country:"",
     city:"",
     state:"",
     lat:0,
-    lng:0
+    lng:0,
+    map:null,
+    socket:null
     }
   },
   methods:{
       initMap:function () {
 
-      /* This is a api to recup the datas of city */
-
-      fetch(`http://api.zippopotam.us/fr/${this.searched}`)
-      .then(results => results.json())
-      .then(data => {
-      
-        this.city=data.places[0]['place name'];
-        this.country=data.country;
-        this.state=data.places[0].state;
-        let lat = data.places[0].latitude;
-        let lng = data.places[0].longitude;
-        this.map = L.map("map", {
-        center: [10.0, 5.0],
-        minZoom: 2,
-        zoom: 2
-      });
-    
-      let basemap = L.tileLayer(
-        "http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
-        {
-        maxZoom: 20,
-        subdomains: ["mt0", "mt1", "mt2", "mt3"]
-        }
-      );
-
-      this.map.addLayer(basemap);
-
-      L.marker([lat, lng]).addTo(this.map);
-      this.map.setView([lat, lng], 16);
-    });
+      /* This is an calling to server to recup the data */
+      this.socket.emit("fetchCity",{postalCode:this.searched,country:this.selected});
     }
   },
   mounted() {
+    /* Connection to server created */
     
-    this.initMap()
+    this.socket = io.connect('http://localhost:8081');
+
+    /* We wait the callback there */
+    this.socket.on('fetchCityResponse',(data)=>{
+          this.city= data.city;
+          this.country= data.country;
+          this.state= data.state;
+          let lat= data.lat;
+          let lng = data.lng;
+          this.map.setView([lat, lng], 16);
+        
+    });
+    this.map =  L.map('map');
+    L.tileLayer(
+        "http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}",
+        {
+        maxZoom: 20
+        }
+      ).addTo(this.map);
+      this.map.setView([0, 0], 1.5);
   },
   updated(){
-       this.initMap()
+     this.initMap()
   }
 
 }

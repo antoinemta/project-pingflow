@@ -1,40 +1,58 @@
 const express = require("express");
 const app = express();
-
-const bodyParser = require('body-parser');
-const request = require('request');
-const passport = require('passport');
-const cors = require('cors');
-const { PORT_NUMBER, client_id, client_secret } = require('./conf');
-const sqlite3 = require('sqlite3').verbose();
-
-let db = new sqlite3.Database('dbMonuments');
-
+const sqlite3 = require("sqlite3").verbose();
+let db = new sqlite3.Database("dbMonuments");
 const bodyParser = require("body-parser");
 const request = require("request");
-const { client_id, client_secret } = require("./conf");
 const passport = require("passport");
 const cors = require("cors");
+const http = require("http");
+const fetch = require("node-fetch");
 require("./passport-strategy");
 const {
   PORT_NUMBER,
-  DBurl,
+  //DBurl,
   Database,
   saltRounds,
-  connection,
+  //connection,
   client_id,
   client_secret
 } = require("./conf");
 
+const server = http.createServer(app);
+const io = require("socket.io").listen(server);
+
+io.sockets.on("connection", socket => {
+  console.log("connected");
+
+  /* This is the server that calls the API */
+  socket.on("fetchCity", res => {
+    fetch(`http://api.zippopotam.us/${res.country}/${res.postalCode}`)
+      .then(results => results.json())
+      .then(data => {
+        let dataFront = {
+          city: data.places[0]["place name"],
+          country: data.country,
+          state: data.places[0].state,
+          lat: data.places[0].latitude,
+          lng: data.places[0].longitude
+        };
+        socket.emit("fetchCityResponse", dataFront);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+});
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-
-app.post('/informationsMonuments', (req, res) => {
+app.post("/informationsMonuments", (req, res) => {
   let city = req.body.city;
   let infosMonuments = undefined;
+});
 
 app.use("/login", require("./routes/login"));
 
@@ -70,8 +88,8 @@ app.post("/informationsCity", (req, res) => {
         client_secret: `${client_secret}`,
 
         near: `${city}`,
-        query: 'monuments',
-        v: '20180323',
+        query: "monuments",
+        v: "20180323",
 
         near: `${capital}`,
         query: "monuments",
@@ -84,7 +102,6 @@ app.post("/informationsCity", (req, res) => {
       if (err) {
         console.error(err);
       } else {
-
         infosMonuments = JSON.parse(body).response.groups[0].items;
         console.log(infosMonuments);
         res.status(200).send(infosMonuments);
@@ -92,55 +109,12 @@ app.post("/informationsCity", (req, res) => {
         infosCity = JSON.parse(body).response.groups[0].items;
         console.log(infosCity);
         res.status(200).send(infosCity);
-
       }
     }
   );
 });
 
-app.get('/PositionCities', (req, res) => {
-  let PositionCity = [
-    'Paris',
-    'Madrid',
-    'Tokyo',
-    'New-York',
-    'Barcelona',
-    'London',
-    'Moscow',
-    'Rome',
-    'Brussels',
-    'Mexico'
-  ];
-  let latLong = [];
-  PositionCity.map(city => {
-    request(
-      {
-        url: 'https://api.foursquare.com/v2/venues/explore',
-        method: 'GET',
-        qs: {
-          client_id: `${client_id}`,
-          client_secret: `${client_secret}`,
-          near: `${city}`,
-          v: '20180323',
-          limit: 1
-        }
-      },
-      (err, response, body) => {
-        if (err) {
-          console.error(err);
-        } else {
-          latLong.push({
-            lat: JSON.parse(body).response.geocode.center.lat,
-            long: JSON.parse(body).response.geocode.center.lng
-          });
-        }
-      }
-    );
-  });
-  res.status(200).send(latLong);
-});
-
-app.listen(PORT_NUMBER, err => {
+server.listen(PORT_NUMBER, err => {
   if (err) {
     console.log(err);
   } else {
