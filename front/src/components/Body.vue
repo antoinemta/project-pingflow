@@ -1,6 +1,6 @@
 <template>
   <section class="row body">
-    <span class="d-none">{{ searched }}</span>
+    <span class="d-none">{{ searched }}{{ selected }}</span>
     <div class="col-12"  v-if="connected">
       <div class="col-12 mt-4 mb-3 d-flex justify-content-center py-2">
         <h1>{{country}}</h1>
@@ -44,7 +44,8 @@ export default {
   name: 'Body',
   props: {
     connected:Boolean,
-    searched:String
+    searched:String,
+    selected:String
   },
   data(){return{
     country:"",
@@ -60,7 +61,7 @@ export default {
 
       /* This is a api to recup the datas of city */
 
-      fetch(`http://api.zippopotam.us/fr/${this.searched}`)
+      fetch(`http://api.zippopotam.us/${this.selected}/${this.searched}`)
       .then(results => results.json())
       .then(data => {
         this.city=data.places[0]['place name'];
@@ -69,11 +70,13 @@ export default {
         let lat = data.places[0].latitude;
         let lng = data.places[0].longitude; 
         this.map.setView([lat, lng], 16);
+        L.marker([lat, lng]).addTo(this.map);
     });
     }
   },
   mounted() {
-    const socket = io.connect('http://localhost:8080');
+    
+    const socket = io.connect('http://localhost:8081');
     this.map =  L.map('map');
     L.tileLayer(
         "http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}",

@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
-    <Header @connect="connect" @search="search"/>
-    <Body :connected="connected" :searched="searched"/>
+    <Header @connect="connect" @search="search" @selection="selection"/>
+    <Body :connected="connected" :searched="searched" :selected="selected"/>
     <Footer />
   </div>
 </template>
@@ -24,7 +24,8 @@ export default {
   data(){
     return{
       connected:true,
-      searched:""
+      searched:"",
+      selected:"fr"
     }
   }
   ,
@@ -35,6 +36,10 @@ export default {
    search:function(event){
      this.connected=true
       this.searched=event
+   },
+   selection:function(event){
+     this.selected=event
+     
    }
   }
 }
