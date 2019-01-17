@@ -1,18 +1,17 @@
 const express = require("express");
 const app = express();
 
-const bodyParser = require('body-parser');
-const request = require('request');
-const passport = require('passport');
-const cors = require('cors');
-const { PORT_NUMBER, client_id, client_secret } = require('./conf');
+
+
+
+
 const sqlite3 = require('sqlite3').verbose();
 
 let db = new sqlite3.Database('dbMonuments');
 
 const bodyParser = require("body-parser");
 const request = require("request");
-const { client_id, client_secret } = require("./conf");
+
 const passport = require("passport");
 const cors = require("cors");
 require("./passport-strategy");
@@ -138,6 +137,7 @@ app.get('/PositionCities', (req, res) => {
     );
   });
   res.status(200).send(latLong);
+});
 });
 
 app.listen(PORT_NUMBER, err => {

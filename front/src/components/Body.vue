@@ -35,6 +35,7 @@
 
 <script>
 
+import io from "socket.io-client";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -50,7 +51,8 @@ export default {
     city:"",
     state:"",
     lat:0,
-    lng:0
+    lng:0,
+    map:null
     }
   },
   methods:{
@@ -61,39 +63,28 @@ export default {
       fetch(`http://api.zippopotam.us/fr/${this.searched}`)
       .then(results => results.json())
       .then(data => {
-      
         this.city=data.places[0]['place name'];
         this.country=data.country;
         this.state=data.places[0].state;
         let lat = data.places[0].latitude;
-        let lng = data.places[0].longitude;
-        this.map = L.map("map", {
-        center: [10.0, 5.0],
-        minZoom: 2,
-        zoom: 2
-      });
-    
-      let basemap = L.tileLayer(
-        "http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
-        {
-        maxZoom: 20,
-        subdomains: ["mt0", "mt1", "mt2", "mt3"]
-        }
-      );
-
-      this.map.addLayer(basemap);
-
-      L.marker([lat, lng]).addTo(this.map);
-      this.map.setView([lat, lng], 16);
+        let lng = data.places[0].longitude; 
+        this.map.setView([lat, lng], 16);
     });
     }
   },
   mounted() {
-    
-    this.initMap()
+    const socket = io.connect('http://localhost:8080');
+    this.map =  L.map('map');
+    L.tileLayer(
+        "http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}",
+        {
+        maxZoom: 20
+        }
+      ).addTo(this.map);
+      this.map.setView([0, 0], 1.5);
   },
   updated(){
-       this.initMap()
+     this.initMap()
   }
 
 }
