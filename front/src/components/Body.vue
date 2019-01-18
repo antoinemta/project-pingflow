@@ -1,5 +1,5 @@
 <template>
-  <section class="row body bg-info">
+  <section class="row body">
     <span class="d-none">{{ searched }}{{ selected }}</span>
     <div class="col-12"  v-if="connected">
       <div class="col-12 mt-4 mb-3 d-flex justify-content-center py-2">
@@ -13,7 +13,7 @@
     </div>
     
     <div class="col-12 containerMap">
-      <div id="map"></div>
+      <div id="map" class="border"></div>
     </div>  
     <div class="col-12 d-flex justify-content-center mt-5">
       Join this city into your favorites ! <button class="ml-3 btn btn-success">Go</button>
@@ -37,7 +37,7 @@
 
 import io from "socket.io-client";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+
 
 export default {
 
@@ -54,6 +54,8 @@ export default {
     lat:0,
     lng:0,
     map:null,
+    markerGroup:null,
+    marker:null,
     socket:null
     }
   },
@@ -76,7 +78,10 @@ export default {
           this.state= data.state;
           let lat= data.lat;
           let lng = data.lng;
+          this.markerGroup.removeLayer(this.marker)
+          this.marker = L.marker([lat,lng]).addTo(this.markerGroup);
           this.map.setView([lat, lng], 16);
+
 
     });
     this.map =  L.map('map');
@@ -86,11 +91,9 @@ export default {
         maxZoom: 20
         }
       ).addTo(this.map);
-      
-    
-    
-    L.marker([49.3346273,2.2252668]).addTo(this.map);
-    this.map.setView([49.3346273,2.2252668], 16);
+    this.markerGroup = L.layerGroup().addTo(this.map);
+    this.marker = L.marker([0,0]).addTo(this.markerGroup);
+    this.map.setView([0,0], 1.5);
   },
   updated(){
      this.initMap()
