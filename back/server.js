@@ -1,13 +1,14 @@
 const express = require("express");
 const app = express();
-const sqlite3 = require("sqlite3").verbose();
+const http = require("http");
+const fetch = require("node-fetch");
+const port = 8081;
+/*const sqlite3 = require("sqlite3").verbose();
 let db = new sqlite3.Database("dbMonuments");
 const bodyParser = require("body-parser");
 const request = require("request");
 const passport = require("passport");
 const cors = require("cors");
-const http = require("http");
-const fetch = require("node-fetch");
 require("./passport-strategy");
 const {
   PORT_NUMBER,
@@ -18,6 +19,7 @@ const {
   client_id,
   client_secret
 } = require("./conf");
+*/
 
 const server = http.createServer(app);
 const io = require("socket.io").listen(server);
@@ -30,14 +32,17 @@ io.sockets.on("connection", socket => {
     fetch(`http://api.zippopotam.us/${res.country}/${res.postalCode}`)
       .then(results => results.json())
       .then(data => {
-        let dataFront = {
-          city: data.places[0]["place name"],
-          country: data.country,
-          state: data.places[0].state,
-          lat: data.places[0].latitude,
-          lng: data.places[0].longitude
-        };
-        socket.emit("fetchCityResponse", dataFront);
+        if (data.places) {
+          let dataFront = {
+            city: data.places[0]["place name"],
+            country: data.country,
+            state: data.places[0].state,
+            lat: data.places[0].latitude,
+            lng: data.places[0].longitude
+          };
+
+          socket.emit("fetchCityResponse", dataFront);
+        }
       })
       .catch(err => {
         console.log(err);
@@ -45,6 +50,7 @@ io.sockets.on("connection", socket => {
   });
 });
 
+/*
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -113,11 +119,11 @@ app.post("/informationsCity", (req, res) => {
     }
   );
 });
-
-server.listen(PORT_NUMBER, err => {
+*/
+server.listen(port, err => {
   if (err) {
     console.log(err);
   } else {
-    console.log(`listening on port ${PORT_NUMBER}`);
+    console.log(`listening on port ${port}`);
   }
 });

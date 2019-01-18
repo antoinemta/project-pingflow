@@ -77,7 +77,7 @@ export default {
           let lat= data.lat;
           let lng = data.lng;
           this.map.setView([lat, lng], 16);
-        
+
     });
     this.map =  L.map('map');
     L.tileLayer(
@@ -86,7 +86,11 @@ export default {
         maxZoom: 20
         }
       ).addTo(this.map);
-      this.map.setView([0, 0], 1.5);
+      
+    
+    
+    L.marker([49.3346273,2.2252668]).addTo(this.map);
+    this.map.setView([49.3346273,2.2252668], 16);
   },
   updated(){
      this.initMap()
