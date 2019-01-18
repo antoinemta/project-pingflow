@@ -32,14 +32,17 @@ io.sockets.on("connection", socket => {
     fetch(`http://api.zippopotam.us/${res.country}/${res.postalCode}`)
       .then(results => results.json())
       .then(data => {
-        let dataFront = {
-          city: data.places[0]["place name"],
-          country: data.country,
-          state: data.places[0].state,
-          lat: data.places[0].latitude,
-          lng: data.places[0].longitude
-        };
-        socket.emit("fetchCityResponse", dataFront);
+        if (data.places) {
+          let dataFront = {
+            city: data.places[0]["place name"],
+            country: data.country,
+            state: data.places[0].state,
+            lat: data.places[0].latitude,
+            lng: data.places[0].longitude
+          };
+
+          socket.emit("fetchCityResponse", dataFront);
+        }
       })
       .catch(err => {
         console.log(err);
