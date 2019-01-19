@@ -3,26 +3,29 @@
      <div class="col-xl-3 py-3 bg-success logoHeader">
        Lorem Ipsum !
      </div>
-      <div class="col-xl-5 bg-danger">
+      <div class="col-xl-4 bg-danger pr-5">
         <div class="row py-3 inputsGroupSearchHeader">
-          <div class="col-md-5 border">
+          <div class="col-md-6 border">
             <input type="text" class="w-100 my-1" placeholder="Tape a country" />
           </div>
-          <div class="col-md-2 border">
+          <div class="col-md-3 border">
             <input type="submit" class="btn btn-success w-100"/>
           </div>
         </div>
        </div>
-     <div class="col-xl-4 bg-dark d-flex justify-content-center">
+     <div class="col-xl-5 bg-dark d-flex justify-content-center">
        <div class="col-md-10"> 
         <div class="row py-3 inputsGroupSearchHeader">
-          <div class="col-md-5 pr-3 pl-0 border">
+          <div class="col-md-4 pr-3 pl-0 border">
             <input type="text" class="w-100 my-1" placeholder="Tape a country" />
           </div>
-          <div class="col-md-5 pl-0 pr-3 border">
+          <div class="col-md-4 pl-0 pr-3 border">
             <input type="text" class="w-100 my-1" placeholder="Tape a country" />
           </div>
-          <div class="col-md-2 px-0 border">
+          <div class="col-md-2 my-1 px-2 border">
+            <input type="submit" value="Log in" class="btn btn-success w-100"/>
+          </div>
+          <div class="col-md-2 my-1 px-2 border">
             <input type="submit" value="Log in" class="btn btn-success w-100"/>
           </div>
           </div>
