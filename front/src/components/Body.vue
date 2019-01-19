@@ -1,5 +1,6 @@
 <template>
   <section class="row body">
+    <!-- SEARCHED 
     <div class="col-4 infosSearchedBody bg-info">
      
       <div class="col-8">
@@ -50,7 +51,46 @@
         <div class="col-12 h-50 pt-4 text-center border"><button class="btn btn-danger btn-lg">Post it</button></div>
       </div>
      
+    </div> -->
+   <div class="col-12">
+
+       <div class="col-12 text-center py-4">
+
+
+
+<span class="titleFavoritesPage">Your favorite</span>
+    
+
+
+
+      
     </div>
+
+<div class="col-12 px-5">
+
+  <div class="row d-flex justify-content-center px-5">
+
+    <div class="col-1 m-3 px-0 border">
+      <div class="col-12 py-2 p-3">
+        <img class="w-100" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/langfr-225px-Flag_of_France.svg.png" />
+      </div>
+      <div class="col-12 contentBlockFavorite px-2">Lorem ipsum</div>
+      <div class="col-12 text-center py-2">
+        <button class="btn btn-success mb-1 py-1 px-2">delete</button>
+      </div>
+    </div>
+    
+    
+    
+
+  </div>
+  
+
+</div>
+
+    
+   </div>
+  
 </section>
 </template>
 
@@ -130,6 +170,11 @@ export default {
 
 <style scoped>
 
+.titleFavoritesPage{
+  font-size:2.5em;
+  font-weight:bold;
+}
+
 .infosSearchedBody
 {
   display:flex;
@@ -137,7 +182,10 @@ export default {
   align-items:center;
 }
 
-
+.contentBlockFavorite{
+  word-wrap:break-word;
+  text-align:center;
+}
 
 .textAlignCenter{
   text-align:center;
