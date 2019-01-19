@@ -96,10 +96,4 @@ header{
 .widthSelect{
   width:11%;
 }
-
-@media (max-width: 800px) {
-  .textAlignRight {
-  text-align:center;
-  }
-}
 </style>

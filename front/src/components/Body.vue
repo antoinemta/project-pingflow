@@ -1,9 +1,10 @@
 <template>
   <section class="row body">
-    <!-- SEARCHED 
-    <div class="col-4 infosSearchedBody bg-info">
+    
+    <div class="col-xl-4 infosSearchedBody pb-5 bg-info">
      
-      <div class="col-8">
+      <div class="col-sm-8 pb-5">
+        <div class="col-12 text-center titleLeft"><span>Lorem Ipsum</span></div>
         <div class="col-12">
       <div class="col-12 py-4 border text-center">
         <img class="w-25" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/langfr-225px-Flag_of_France.svg.png" />
@@ -39,7 +40,7 @@
         </div>      
       </div>
     </div>
-    <div class="col-8 bg-success">
+    <div class="col-xl-8 bg-success">
       <div class="col-12 py-5 border containerMap">
 
            <div id="map" class="border"></div>
@@ -48,10 +49,10 @@
         <div class="col-12 h-50 border">
         <input type="text" class="h-100 w-100 inputComment" />
         </div>
-        <div class="col-12 h-50 pt-4 text-center border"><button class="btn btn-danger btn-lg">Post it</button></div>
+        <div class="col-12 pt-4 text-center border"><button class="btn btn-danger btn-lg">Post it</button></div>
       </div>
      
-    </div> -->
+    </div> 
     <!-- FAVORITES
    <div class="col-12">
      <div class="col-12 text-center py-4">
@@ -168,10 +169,16 @@ export default {
 
 <style scoped>
 
+
 .inputsGroupLog{
   display:flex;
   justify-content:center;
   align-items:center;
+}
+
+.titleLeft
+{
+  padding-bottom:11vh;
 }
 
 .titleFavoritesPage{
@@ -196,7 +203,7 @@ export default {
 }
 
 .body {
- height:80vh;
+ min-height:80vh;
 }
 
 .containerForm{
@@ -225,4 +232,15 @@ export default {
   width:100%;
   height:90%;
 }
+
+@media (max-width: 800px) {
+  .containerForm{
+    height: 40vh;
+  }
+
+  .containerMap{
+    height:60vh;
+  }
+}
+
 </style>
