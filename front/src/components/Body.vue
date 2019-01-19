@@ -92,8 +92,8 @@ export default {
         }
       ).addTo(this.map);
     this.markerGroup = L.layerGroup().addTo(this.map);
-    this.marker = L.marker([0,0]).addTo(this.markerGroup);
-    this.map.setView([0,0], 1.5);
+    this.marker = L.marker([46,2]).addTo(this.markerGroup);
+    this.map.setView([46,2], 1.5);
   },
   updated(){
      this.initMap()

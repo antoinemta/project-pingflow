@@ -1,15 +1,34 @@
 <template>
-  <header class="row bg-dark text-white py-4">
-      <div class="col-lg-2 textAlignRight pr-5"><h2>Find your city !</h2></div>
-      <div class="col-lg-4 px-5"><input type="text" class="w-50 mr-3" placeholder="Tape a postal code city" v-model="searched" />Pays :<select class="widthSelect ml-2" v-model="countrySearched" @change="selection"><option>fr</option><option>us</option></select><button class="btn btn-success ml-4 mt-2" @click="search">Search</button></div>
-    <div class="col px-0 pr-5 textAlignRight">
-      <span class="pr-3">Connect you !</span>
-      <span>Go to your favorites</span>
-      <input type="text" class="ml-2" />
-      <input type="password" class="ml-3" />
-      <button class="btn btn-success ml-4 mb-2 mt-2">Go</button>
-      <button class="btn btn-success ml-4" @click="connect">Log in</button>
-    </div>
+  <header class="row bg-dark">
+     <div class="col-xl-3 py-3 bg-success logoHeader">
+       Lorem Ipsum !
+     </div>
+      <div class="col-xl-5 bg-danger">
+        <div class="row py-3 inputsGroupSearchHeader">
+          <div class="col-md-5 border">
+            <input type="text" class="w-100 my-1" placeholder="Tape a country" />
+          </div>
+          <div class="col-md-2 border">
+            <input type="submit" class="btn btn-success w-100"/>
+          </div>
+        </div>
+       </div>
+     <div class="col-xl-4 bg-dark d-flex justify-content-center">
+       <div class="col-md-10"> 
+        <div class="row py-3 inputsGroupSearchHeader">
+          <div class="col-md-5 pr-3 pl-0 border">
+            <input type="text" class="w-100 my-1" placeholder="Tape a country" />
+          </div>
+          <div class="col-md-5 pl-0 pr-3 border">
+            <input type="text" class="w-100 my-1" placeholder="Tape a country" />
+          </div>
+          <div class="col-md-2 px-0 border">
+            <input type="submit" value="Log in" class="btn btn-success w-100"/>
+          </div>
+          </div>
+        </div>
+       </div>
+     </div>
   </header>
 </template>
 
@@ -44,6 +63,23 @@
 <style scoped>
 header{
   min-height:10vh;
+}
+
+.inputsGroupSearchHeader
+{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100%;
+}
+
+.logoHeader{
+  color:white;
+  font-size:2.0em;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .textAlignRight{
