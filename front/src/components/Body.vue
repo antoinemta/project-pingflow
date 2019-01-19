@@ -1,34 +1,57 @@
 <template>
   <section class="row body">
-    <span class="d-none">{{ searched }}{{ selected }}</span>
-    <div class="col-12"  v-if="connected">
-      <div class="col-12 mt-4 mb-3 d-flex justify-content-center py-2">
-        <h1>{{country}}</h1>
-      </div>
-    <div class="col-12 d-flex justify-content-center py-2">
-      <h4>{{state}}</h4>
-    </div>
-    <div class="col-12 d-flex justify-content-center py-2">
-      <h6>{{city}}</h6>
-    </div>
-    
-    <div class="col-12 containerMap">
-      <div id="map" class="border"></div>
-    </div>  
-    <div class="col-12 d-flex justify-content-center mt-5">
-      Join this city into your favorites ! <button class="ml-3 btn btn-success">Go</button>
-    </div> 
-  </div>
-  <div class="col-12 containerLogin" v-else>
-    <div class="col-3 border px-5 pb-5 textAlignCenter bg-light">
-      <div class="col-12 mb-4 pt-3">Log in</div>
-      <input class="col-12 mb-4" type="text" />
-      <input class="col-12 mb-4" type="text" />
-      <button class="btn btn-success">Go</button>
-    </div>
-  </div>
-</section>
+    <div class="col-4 infosSearchedBody bg-info">
+     
+      <div class="col-8">
+        <div class="col-12">
+      <div class="col-12 py-4 border text-center">
+        <img class="w-25" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/langfr-225px-Flag_of_France.svg.png" />
 
+      </div>
+      <div class="col-12 border text-center">
+        Lorem Ipsum
+
+      </div>
+      <div class="col-12 border text-center">
+        Lorem Ipsum
+
+      </div>
+      <div class="col-12 border text-center">
+        Lorem Ipsum
+
+      </div>
+      <div class="col-12 border text-center">
+        Lorem Ipsum
+
+      </div>
+      <div class="col-12 border text-center">
+        Lorem Ipsum
+
+      </div>
+      <div class="col-12 border text-center">
+        Lorem Ipsum
+
+      </div>
+      </div>
+      <div class="col-12 d-flex justify-content-center">
+          <button class="btn btn-success w-50 mt-4">add</button>
+        </div>      
+      </div>
+    </div>
+    <div class="col-8 bg-success">
+      <div class="col-12 py-5 border containerMap">
+
+           <div id="map" class="border"></div>
+      </div>
+      <div class="col-12 containerForm border">
+        <div class="col-12 h-50 border">
+        <input type="text" class="h-100 w-100 inputComment" />
+        </div>
+        <div class="col-12 h-50 pt-4 text-center border"><button class="btn btn-danger btn-lg">Post it</button></div>
+      </div>
+     
+    </div>
+</section>
 </template>
 
 
@@ -107,15 +130,33 @@ export default {
 
 <style scoped>
 
+.infosSearchedBody
+{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+
+
 .textAlignCenter{
   text-align:center;
 }
+
 .body {
  height:80vh;
 }
+
+.containerForm{
+  padding-left:6%;
+  padding-right:6%;
+  height:40%;
+}
+
 .containerMap{
-  height:50%;
+  height:60%;
   display:flex;
+  align-items:center;
   padding-left:17%;
   padding-right:17%;
 
@@ -130,6 +171,6 @@ export default {
 #map
 {
   width:100%;
-  height:100%;
+  height:90%;
 }
 </style>
