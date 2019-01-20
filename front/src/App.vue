@@ -33,7 +33,7 @@ export default {
   ,
   methods:{
     login:function() {
-      this.logVue=!this.logVue;
+      this.logVue=false;
       
     }
   }

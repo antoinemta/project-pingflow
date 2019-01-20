@@ -1,5 +1,6 @@
 <template>
   <Home :socketHome="socketBody" v-if="logVue"/>
+  <Registration :socketRegistration="socketBody" v-else-if="!logVue"/>
 </template>
 
 
@@ -8,12 +9,14 @@
 
 
 import Home from './Home.vue'
+import Registration from './Registration.vue'
 
 export default {
 
   name: 'Body',
   components:{
-    Home
+    Home,
+    Registration
   },
   props: {
     socketBody: Object,
