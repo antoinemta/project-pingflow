@@ -1,5 +1,5 @@
 <template>
-  <Home :socketHome="socketBody" />
+  <Home :socketHome="socketBody" v-if="logVue"/>
 </template>
 
 
