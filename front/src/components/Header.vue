@@ -1,6 +1,6 @@
 <template>
   <header class="row bg-dark">
-     <div class="col-xl-3 py-3 bg-success logoHeader">
+     <div class="col-xl-3 py-3 bg-success logoHeader" @click='backHome'>
        Lorem Ipsum !
      </div>
       <div class="col-xl-4 bg-danger pr-5">
@@ -53,6 +53,9 @@
     ,
     login:function(){
       this.$emit('login');
+    },
+    backHome:function(){
+      this.$emit('backHome');
     }
   }
 }

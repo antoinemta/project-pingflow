@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <Header :socketHeader="socket" @login="login" />
+    <Header :socketHeader="socket" @login="login" @backHome="backHome" />
     <Body :socketBody="socket" :logVue="logVue" />
     <Footer />
   </div>
@@ -35,6 +35,9 @@ export default {
     login:function() {
       this.logVue=false;
       
+    },
+    backHome:function(){
+      this.logVue=true;
     }
   }
   ,mounted(){
