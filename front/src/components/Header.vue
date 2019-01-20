@@ -6,10 +6,10 @@
       <div class="col-xl-4 bg-danger pr-5">
         <div class="row py-3 inputsGroupSearchHeader">
           <div class="col-md-6 border">
-            <input type="text" class="w-100 my-1" placeholder="Tape a country" />
+            <input type="text" class="w-100 my-1" placeholder="Tape a country" v-model="countrySearched" />
           </div>
           <div class="col-md-3 border">
-            <input type="submit" class="btn btn-success w-100"/>
+            <input type="submit" class="btn btn-success w-100"   @click='sendSearch'/>
           </div>
         </div>
        </div>
@@ -26,7 +26,7 @@
             <input type="submit" value="Log in" class="btn btn-success w-100"/>
           </div>
           <div class="col-md-2 my-1 px-2 border">
-            <input type="submit" value="Log in" class="btn btn-success w-100"/>
+            <input type="submit" value="Log in" class="btn btn-success w-100" @click="login" />
           </div>
           </div>
         </div>
@@ -39,23 +39,20 @@
   export default {
   name: 'Header',
   props:{
-    connected:Boolean
+    socketHeader:Object
   },
   data(){
     return{
-      searched:"",
-      countrySearched:"fr"
+      countrySearched:""
     }
   },
   methods:{
-    connect: function(){
-      this.$emit('connect');
-    },
-    search: function(){
-      this.$emit('search',this.searched);
-    },
-    selection:function(){
-      this.$emit('selection',this.countrySearched);
+    sendSearch:function() {
+      this.socketHeader.emit('countrySearched',this.countrySearched);
+    }
+    ,
+    login:function(){
+      this.$emit('login');
     }
   }
 }

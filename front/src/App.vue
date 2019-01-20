@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
-    <Header @connect="connect" @search="search" @selection="selection"/>
-    <Body :connected="connected" :searched="searched" :selected="selected"/>
+    <Header :socketHeader="socket" @login="login" />
+    <Body :socketBody="socket" :logVue="logVue" />
     <Footer />
   </div>
 </template>
@@ -10,9 +10,12 @@
 so I use props to change components . -->
 
 <script>
+import io from "socket.io-client";
 import Header from './components/Header.vue'
 import Body from './components/Body.vue'
 import Footer from './components/Footer.vue'
+
+const socket = io.connect("http://localhost:8081");
 
 export default {
   name: 'app',
@@ -23,24 +26,18 @@ export default {
   },
   data(){
     return{
-      connected:true,
-      searched:"",
-      selected:"fr"
+      socket: socket,
+      logVue: true
     }
   }
   ,
   methods:{
-   connect:function (){
-     this.connected=false
-   },
-   search:function(event){
-     this.connected=true
-      this.searched=event
-   },
-   selection:function(event){
-     this.selected=event
-     
-   }
+    login:function() {
+      this.logVue=!this.logVue;
+      
+    }
+  }
+  ,mounted(){
   }
 }
 </script>
