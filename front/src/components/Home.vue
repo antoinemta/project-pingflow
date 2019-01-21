@@ -1,8 +1,6 @@
 <template>
   <section class="row body">
-    
     <div class="col-xl-4 infosSearchedBody pb-5 bg-info" >
-     
       <div class="col-sm-8 pb-5">
         <div class="col-12 text-center titleLeft"><span>{{ country }}</span></div>
         <div class="col-12">
@@ -21,13 +19,10 @@
      
       <div class="col-12 border text-center">
         {{ money }}
-
       </div>
        <div class="col-12 border text-center">
          {{ population }}
-
       </div>
-      
       </div>
       <div class="col-12 pb-5 d-flex justify-content-center">
           <button class="btn btn-success w-50 mt-4">add</button>
@@ -36,8 +31,7 @@
     </div>
     <div class="col-xl-8 bg-success">
       <div class="col-12 py-5 border containerMap">
-
-           <div id="map" class="border"></div>
+         <div id="map" class="border"></div>
       </div>
       <div class="col-12 containerForm border">
         <div class="col-12 h-50 border">
@@ -45,19 +39,14 @@
         </div>
         <div class="col-12 pt-4 text-center border"><button class="btn btn-danger btn-lg">Post it</button></div>
       </div>
-     
-    </div>
-    
- </section>
+     </div>
+  </section>
 </template>
-
 
 
 <script>
 
-
 import L from "leaflet";
-
 
 export default {
 
@@ -121,7 +110,6 @@ export default {
   }
 
 }
-
 
 </script>
 

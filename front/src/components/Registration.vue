@@ -4,7 +4,7 @@
 
     <div class="col-3 border">
       <div class="col-12 text-center">
-      aze
+      Lorem Ipsum
     </div>
     <div class="col-12 text-center py-3 px-5">
       <input type="text" class="w-100" v-model="user.pseudonyme" />

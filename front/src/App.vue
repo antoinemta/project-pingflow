@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
-    <Header :socketHeader="socket" @login="login" @backHome="backHome" />
-    <Body :socketBody="socket" :logVue="logVue" />
+    <Header :loged="loged" :socketHeader="socket" @login="login" @backHome="backHome" @deco="deco" />
+    <Body :socketBody="socket" :logVue="logVue" :loged="loged"/>
     <Footer />
   </div>
 </template>
@@ -16,6 +16,9 @@ import Body from './components/Body.vue'
 import Footer from './components/Footer.vue'
 
 const socket = io.connect("http://localhost:8081");
+const token = localStorage.getItem("token");
+
+  
 
 export default {
   name: 'app',
@@ -27,7 +30,10 @@ export default {
   data(){
     return{
       socket: socket,
-      logVue: true
+      logVue: true,
+      loged: false,
+      token: token,
+      favorites:[]
     }
   }
   ,
@@ -38,9 +44,22 @@ export default {
     },
     backHome:function(){
       this.logVue=true;
+    },
+    deco:function(){
+      this.loged=false;
     }
   }
   ,mounted(){
+  if (this.token){
+    socket.emit('check',this.token);
+  }
+
+  socket.on('recupToken',(res)=>{
+    alert('ok !')
+    this.loged=true;
+    this.favorites=res;
+  });
+    
   }
 }
 </script>
