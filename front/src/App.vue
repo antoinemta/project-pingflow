@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <Header :loged="loged" :socketHeader="socket" @login="login" @backHome="backHome" @deco="deco" />
-    <Body :socketBody="socket" :logVue="logVue" :loged="loged"/>
+    <Body :socketBody="socket" :logVue="logVue" :loged="loged" :favorites="favorites" />
     <Footer />
   </div>
 </template>
@@ -50,6 +50,7 @@ export default {
     }
   }
   ,mounted(){
+   
   if (this.token){
     socket.emit('check',this.token);
   }

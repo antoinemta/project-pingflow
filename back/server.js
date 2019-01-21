@@ -11,7 +11,7 @@ io.sockets.on("connection", socket => {
   console.log("connected");
 
   socket.on("check", res => {
-    var db = new sqlite3.Database("./findyourcountry.db");
+    let db = new sqlite3.Database("./findyourcountry.db");
     db.all(`SELECT token FROM users WHERE token='${res}'`, (err, rows) => {
       if (err) {
         return false;
@@ -49,7 +49,13 @@ io.sockets.on("connection", socket => {
       });
   });
   socket.on("sendLog", res => {
-    var db = new sqlite3.Database("./findyourcountry.db");
+    let response = {
+      display: [false, false, false],
+      textColor: "",
+      message: ""
+    };
+
+    let db = new sqlite3.Database("./findyourcountry.db");
     db.all(
       `SELECT pseudonyme FROM users WHERE pseudonyme='${res.pseudonyme}'`,
       (err, rows) => {
@@ -57,7 +63,8 @@ io.sockets.on("connection", socket => {
           return false;
         } else {
           if (rows.length >= 1) {
-            console.log("deja pris");
+            response.display[0] = true;
+            socket.emit("responseInsert", response);
             return false;
           } else {
             db.run(
@@ -68,7 +75,10 @@ io.sockets.on("connection", socket => {
                 if (err) {
                   return false;
                 } else {
-                  console.log("enregistré!");
+                  response.display[2] = true;
+                  response.message = "You have been registred !";
+                  response.textColor = "text-success";
+                  socket.emit("responseInsert", response);
                 }
               }
             );
@@ -81,7 +91,7 @@ io.sockets.on("connection", socket => {
   });
 
   socket.on("login", res => {
-    var db = new sqlite3.Database("./findyourcountry.db");
+    let db = new sqlite3.Database("./findyourcountry.db");
     db.all(
       `SELECT pseudonyme, password, token FROM users WHERE pseudonyme='${
         res.pseudonyme

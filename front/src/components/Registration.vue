@@ -9,12 +9,15 @@
     <div class="col-12 text-center py-3 px-5">
       <input type="text" class="w-100" v-model="user.pseudonyme" />
     </div>
+    <div class="col-12 text-center text-danger" v-if="response.display[0]">Pseudonyme already used</div>
     <div class="col-12 text-center py-3 px-5">
       <input type="text" class="w-100" v-model="user.password" />
     </div>
+    <div class="col-12 text-center text-danger" v-if="response.display[1]">passwords differents</div>
     <div class="col-12 text-center py-3 px-5">
       <input type="text" class="w-100" v-model="user.passwordVerif" />
     </div>
+    <div :class="'col-12 text-center ' +response.textColor" v-if="response.display[2]">{{ response.message }}</div>
     <div class="col-12 text-center py-3 px-5">
       <button @click="sendLog">connection</button>
     </div>
@@ -40,6 +43,11 @@ export default {
       pseudonyme:"",
       password:"",
       passwordVerif:""
+    },
+    response:{
+      display:[false,false,false],
+      textColor:"",
+      message:""
     }
     }
   }
@@ -51,13 +59,18 @@ export default {
           this.socketRegistration.emit('sendLog',this.user);
       }
       else{
-        alert('passwords differents');
+        this.response.display=[false, true, true];
+        this.response.textColor="text-danger";
+        this.response.message="passwords differents";
       }
       }
     
   },
   mounted(){
-  
+    this.socketRegistration.on('responseInsert',(res)=>{
+
+      this.response=res;
+    });
   }
 
 }

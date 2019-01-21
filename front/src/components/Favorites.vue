@@ -31,7 +31,8 @@ export default {
   name: 'Favorites',
   props: {
     socketFavorites: Object,
-    logVue: Boolean
+    logVue: Boolean,
+    favorites:Object
   },
   data(){return{
     
@@ -41,7 +42,6 @@ export default {
      
   },
   mounted() {
-   
   },
   updated(){
      
