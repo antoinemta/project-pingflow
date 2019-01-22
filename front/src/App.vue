@@ -47,6 +47,8 @@ export default {
     },
     deco:function(){
       this.loged=false;
+      this.favorites=[];
+      localStorage.removeItem('token');
     }
   }
   ,mounted(){
@@ -56,9 +58,10 @@ export default {
   }
 
   socket.on('recupToken',(res)=>{
-    alert('ok !')
+    alert(res.favorites)
+    localStorage.setItem('token',res.token)
     this.loged=true;
-    this.favorites=res;
+    this.favorites=res.favorites;
   });
     
   }

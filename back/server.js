@@ -23,7 +23,11 @@ io.sockets.on("connection", socket => {
               if (err) {
                 return false;
               } else {
-                socket.emit("recupToken", data);
+                let infoUser = {
+                  token: res,
+                  favorites: data
+                };
+                socket.emit("recupToken", infoUser);
               }
             }
           );
@@ -92,6 +96,10 @@ io.sockets.on("connection", socket => {
 
   socket.on("login", res => {
     let db = new sqlite3.Database("./findyourcountry.db");
+    let response = {
+      inputPseu: false,
+      inputPass: false
+    };
     db.all(
       `SELECT pseudonyme, password, token FROM users WHERE pseudonyme='${
         res.pseudonyme
@@ -102,12 +110,30 @@ io.sockets.on("connection", socket => {
         } else {
           if (rows.length == 1) {
             if (rows[0].password == res.password) {
-              console.log("okay");
+              db.all(
+                `SELECT country, flag, capital, continent, money, population, lat, lng FROM favorites WHERE token='${
+                  rows[0].token
+                }'`,
+                (err, data) => {
+                  if (err) {
+                    return false;
+                  } else {
+                    let infoUser = {
+                      token: rows[0].token,
+                      favorites: data
+                    };
+
+                    socket.emit("recupToken", infoUser);
+                  }
+                }
+              );
             } else {
-              console.log("mdp errone");
+              response.inputPass = true;
+              socket.emit("falseLog", response);
             }
           } else {
-            console.log("pas trouve");
+            response.inputPseu = true;
+            socket.emit("falseLog", response);
           }
         }
       }
