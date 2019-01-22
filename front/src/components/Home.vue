@@ -26,7 +26,10 @@
       </div>
       <div class="col-12 pb-5 d-flex justify-content-center">
           <button class="btn btn-success w-50 mt-4" @click="addCountry" v-if="this.loged">add</button>
-        </div>      
+        </div>
+        <div class="col-12 text-danger pb-5 d-flex justify-content-center" v-if="alreadyAdded">
+          Already added.
+        </div>    
       </div>
     </div>
     <div class="col-xl-8 bg-success">
@@ -55,6 +58,7 @@ export default {
     loged:Boolean
   },
   data(){return{
+    alreadyAdded:false,
     countrySelec:{
     token:this.token,
     country:"------",
@@ -84,7 +88,7 @@ export default {
        this.socketHome.emit('addCountry',this.favorites);
      }
      else{
-       alert('no')
+       this.alreadyAdded=true
      }
     }
   },
