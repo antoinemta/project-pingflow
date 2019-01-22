@@ -200,6 +200,8 @@ export default {
 
   .containerMap{
     height:60vh;
+    padding-left:2px;
+    padding-right:2px;
   }
 }
 

@@ -2,7 +2,7 @@
   <section class="row body">
   <div class="col-12 inputsGroupLog">
 
-    <div class="col-3 border">
+    <div class="col-xl-3 col-md-6 border">
       <div class="col-12 text-center">
       Lorem Ipsum
     </div>
@@ -11,11 +11,11 @@
     </div>
     <div class="col-12 text-center text-danger" v-if="response.display[0]">Pseudonyme already used</div>
     <div class="col-12 text-center py-3 px-5">
-      <input type="text" class="w-100" v-model="user.password" />
+      <input type="password" class="w-100" v-model="user.password" />
     </div>
     <div class="col-12 text-center text-danger" v-if="response.display[1]">passwords differents</div>
     <div class="col-12 text-center py-3 px-5">
-      <input type="text" class="w-100" v-model="user.passwordVerif" />
+      <input type="password" class="w-100" v-model="user.passwordVerif" />
     </div>
     <div :class="'col-12 text-center ' +response.textColor" v-if="response.display[2]">{{ response.message }}</div>
     <div class="col-12 text-center py-3 px-5">

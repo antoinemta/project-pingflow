@@ -7,7 +7,7 @@
    <div class="col-12 px-5">
     <div class="row d-flex justify-content-center px-5">
 
-      <div class="col-1 m-3 px-0 border" v-for="favorite in this.favorites">
+      <div class="col-xl-1 col-lg-2 col-md-3 col-sm-4 m-3 px-0 border" v-for="favorite in this.favorites">
         <div  class="col-12 py-2 p-3">
           <img :id="favorite.country" class="w-100" :src="favorite.flag"  @click="detail"/>
         </div>

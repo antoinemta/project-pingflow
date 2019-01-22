@@ -1,13 +1,19 @@
 <template>
   <div class="container-fluid">
-    <Header :loged="loged" :socketHeader="socket" @switchComponent="switchComponent" />
-    <Body :actifComponent="actifComponent" @switchComponent="switchComponent" :socketBody="socket" :loged="loged" :favorites="favorites" :token="token" />
+    <Header :loged="loged"
+      :socketHeader="socket"
+      @switchComponent="switchComponent" />
+      <Body :actifComponent="actifComponent" 
+      @switchComponent="switchComponent" 
+      :socketBody="socket" 
+      :loged="loged" 
+      :favorites="favorites" 
+      :token="token" />
     <Footer />
   </div>
 </template>
 
-<!-- I haven't yet used the routes, 
-so I use props to change components . -->
+
 
 <script>
 import io from "socket.io-client";
@@ -17,8 +23,6 @@ import Footer from './components/Footer.vue'
 
 const socket = io.connect("http://localhost:8081");
 const token = localStorage.getItem("token");
-
-  
 
 export default {
   name: 'app',
@@ -30,9 +34,7 @@ export default {
   data(){
     return{
       socket: socket,
-      logVue: true,
       loged: false,
-      detail:false,
       token: token,
       favorites:[],
       actifComponent:"home"
@@ -55,10 +57,10 @@ export default {
   ,mounted(){
    
   if (this.token){
-    socket.emit('check',this.token);
+    socket.emit('checkingToken',this.token);
   }
 
-  socket.on('recupToken',(token, favorites)=>{
+  socket.on('log',(token, favorites)=>{
     localStorage.setItem('token',token)
     this.loged=true;
     this.favorites=favorites;

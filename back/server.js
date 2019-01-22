@@ -9,7 +9,7 @@ var sqlite3 = require("sqlite3").verbose();
 
 io.sockets.on("connection", socket => {
   console.log("connected");
-  socket.on("check", res => {
+  socket.on("checkingToken", res => {
     let db = new sqlite3.Database("./findyourcountry.db");
     db.all(`SELECT token FROM users WHERE token='${res}'`, (err, rows) => {
       if (err) {
@@ -24,7 +24,7 @@ io.sockets.on("connection", socket => {
                 db.close();
                 return false;
               } else {
-                socket.emit("recupToken", res, data);
+                socket.emit("log", res, data);
               }
             }
           );
@@ -110,7 +110,7 @@ io.sockets.on("connection", socket => {
           db.close();
           return false;
         } else {
-          socket.emit("recupToken", res.token, resp);
+          socket.emit("log", res.token, resp);
         }
       }
     );
@@ -129,7 +129,7 @@ io.sockets.on("connection", socket => {
           db.close();
           return false;
         } else {
-          socket.emit("recupToken", token, supp);
+          socket.emit("log", token, supp);
         }
       }
     );
@@ -197,7 +197,7 @@ io.sockets.on("connection", socket => {
                     db.close();
                     return false;
                   } else {
-                    socket.emit("recupToken", rows[0].token, data);
+                    socket.emit("log", rows[0].token, data);
                   }
                 }
               );
