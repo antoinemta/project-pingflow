@@ -9,11 +9,11 @@ var sqlite3 = require("sqlite3").verbose();
 
 io.sockets.on("connection", socket => {
   console.log("connected");
-
   socket.on("check", res => {
     let db = new sqlite3.Database("./findyourcountry.db");
     db.all(`SELECT token FROM users WHERE token='${res}'`, (err, rows) => {
       if (err) {
+        db.close();
         return false;
       } else {
         if (rows.length == 1) {
@@ -21,6 +21,7 @@ io.sockets.on("connection", socket => {
             `SELECT country, flag, capital, continent, money, population, lat, lng FROM favorites WHERE token='${res}'`,
             (err, data) => {
               if (err) {
+                db.close();
                 return false;
               } else {
                 socket.emit("recupToken", res, data);
@@ -28,12 +29,13 @@ io.sockets.on("connection", socket => {
             }
           );
         } else {
+          db.close();
           return false;
         }
       }
     });
-
     db.close();
+    return true;
   });
 
   socket.on("countrySearched", res => {
@@ -43,11 +45,13 @@ io.sockets.on("connection", socket => {
     })
       .then(resApi => {
         socket.emit("resApi", resApi.data);
+        return true;
       })
       .catch(() => {
         return false;
       });
   });
+
   socket.on("sendLog", res => {
     let response = {
       display: [false, false, false],
@@ -65,6 +69,7 @@ io.sockets.on("connection", socket => {
           if (rows.length >= 1) {
             response.display[0] = true;
             socket.emit("responseInsert", response);
+            db.close();
             return false;
           } else {
             db.run(
@@ -73,6 +78,7 @@ io.sockets.on("connection", socket => {
               }','${res.password}', '${randtoken(16)}')`,
               err => {
                 if (err) {
+                  db.close();
                   return false;
                 } else {
                   response.display[2] = true;
@@ -86,8 +92,8 @@ io.sockets.on("connection", socket => {
         }
       }
     );
-
     db.close();
+    return true;
   });
 
   socket.on("addCountry", resp => {
@@ -101,6 +107,7 @@ io.sockets.on("connection", socket => {
       }','${res.population}','${res.lat}','${res.lng}','etrher')`,
       err => {
         if (err) {
+          db.close();
           return false;
         } else {
           socket.emit("recupToken", res.token, resp);
@@ -108,6 +115,7 @@ io.sockets.on("connection", socket => {
       }
     );
     db.close();
+    return true;
   });
 
   socket.on("deleteCountry", (country, favorites, token) => {
@@ -118,6 +126,7 @@ io.sockets.on("connection", socket => {
       `DELETE FROM favorites WHERE token='${token}' AND country='${country}'`,
       err => {
         if (err) {
+          db.close();
           return false;
         } else {
           socket.emit("recupToken", token, supp);
@@ -125,25 +134,23 @@ io.sockets.on("connection", socket => {
       }
     );
     db.close();
+    return true;
   });
 
   socket.on("modifComment", (comment, country, token) => {
     let db = new sqlite3.Database("./findyourcountry.db");
-    console.log(comment);
-    console.log(country);
-    console.log(token);
     db.run(
       `UPDATE favorites SET comment='${comment}' WHERE token='${token}' AND country='${country}'`,
       err => {
         if (err) {
-          console.log(err);
+          db.close();
           return false;
         } else {
-          console.log("okay");
+          db.close();
+          return true;
         }
       }
     );
-    db.close();
   });
 
   socket.on("fetchCountry", (country, token) => {
@@ -153,15 +160,15 @@ io.sockets.on("connection", socket => {
       `SELECT country, flag, capital, continent, money, population, lat, lng, comment FROM favorites WHERE token='${token}' AND country='${country}'`,
       (err, data) => {
         if (err) {
+          db.close();
           return false;
         } else {
-          console.log(data);
           socket.emit("recupFetch", data);
         }
       }
     );
-
     db.close();
+    return true;
   });
 
   socket.on("login", res => {
@@ -176,6 +183,7 @@ io.sockets.on("connection", socket => {
       }'`,
       (err, rows) => {
         if (err) {
+          db.close();
           return false;
         } else {
           if (rows.length == 1) {
@@ -186,6 +194,7 @@ io.sockets.on("connection", socket => {
                 }'`,
                 (err, data) => {
                   if (err) {
+                    db.close();
                     return false;
                   } else {
                     socket.emit("recupToken", rows[0].token, data);
@@ -203,8 +212,8 @@ io.sockets.on("connection", socket => {
         }
       }
     );
-
     db.close();
+    return true;
   });
 });
 

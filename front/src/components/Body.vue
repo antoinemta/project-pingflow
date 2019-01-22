@@ -1,8 +1,8 @@
 <template>
-  <Detail :country="country" :token="token" :socketDetail="socketBody" v-if="loged && detail"/>
-  <Home :token="token" :favorites="favorites" :socketHome="socketBody" v-else-if="logVue && !detail"/>
-  <Registration :socketRegistration="socketBody" v-else-if="!logVue && !loged && !detail"/>
-  <Favorites :token="token" :favorites="favorites" :socketFavorites="socketBody" @detail="detailFonc" v-else/>
+  <Detail :token="token" :country="country"  :socketDetail="socketBody" v-if="this.actifComponent=== 'detail'"/>
+  <Home :token="token" :loged="loged" :favorites="favorites" :socketHome="socketBody" v-else-if="this.actifComponent=== 'home'" />
+  <Favorites :token="token" :favorites="favorites" :socketFavorites="socketBody" @detil="detil" v-else-if="this.actifComponent==='favorites'" />
+  <Registration :socketRegistration="socketBody" v-else/>
 </template>
 
 
@@ -30,19 +30,17 @@ export default {
     loged:Boolean,
     favorites:Object,
     token:String,
-    detail:Boolean
+    actifComponent:String
   },
   data(){return{
       country:""
     }
   },
   methods:{
-    detailFonc:function (event) {
-      this.detail=true;
+    detil:function (event) {
+      this.$emit('switchComponent','detail');
       this.country=event;
-      
-      
-    }
+      }
       
   },
   mounted() {

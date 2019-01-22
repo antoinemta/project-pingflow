@@ -25,7 +25,7 @@
       </div>
       </div>
       <div class="col-12 pb-5 d-flex justify-content-center">
-          <button class="btn btn-success w-50 mt-4" @click="addCountry">add</button>
+          <button class="btn btn-success w-50 mt-4" @click="addCountry" v-if="this.loged">add</button>
         </div>      
       </div>
     </div>
@@ -51,17 +51,18 @@ export default {
   props: {
     socketHome: Object,
     favorites:Object,
-    token:String
+    token:String,
+    loged:Boolean
   },
   data(){return{
     countrySelec:{
     token:this.token,
-    country:"",
-    capital:"",
-    region:"",
+    country:"------",
+    capital:"------",
+    region:"------",
     population:0,
-    money:"",
-    flag:"",
+    money:"------",
+    flag:"------",
     lat:0,
     lng:0},
     map:null,

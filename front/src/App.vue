@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
-    <Header :loged="loged" :socketHeader="socket" @login="login" @backHome="backHome" @deco="deco" />
-    <Body :detail="detail" :socketBody="socket" :logVue="logVue" :loged="loged" :favorites="favorites" :token="token" />
+    <Header :loged="loged" :socketHeader="socket" @switchComponent="switchComponent" />
+    <Body :actifComponent="actifComponent" @switchComponent="switchComponent" :socketBody="socket" :loged="loged" :favorites="favorites" :token="token" />
     <Footer />
   </div>
 </template>
@@ -34,27 +34,23 @@ export default {
       loged: false,
       detail:false,
       token: token,
-      favorites:[]
+      favorites:[],
+      actifComponent:"home"
     }
   }
   ,
   methods:{
-    login:function() {
-      
-      this.detail=false;
-      this.logVue=false;
-      
-    },
-    backHome:function(){
-      this.logVue=true;
-      this.detail=false;
-    },
-    deco:function(){
-      this.loged=false;
-      this.detail=false;
-      this.favorites=[];
-      localStorage.removeItem('token');
+
+    switchComponent:function(event){
+
+      if (event=='deco'){
+        this.loged=false;
+        this.favorites=[];
+        localStorage.removeItem('token');
+      }
+      this.actifComponent=event;
     }
+    
   }
   ,mounted(){
    

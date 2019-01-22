@@ -46,7 +46,8 @@ export default {
       this.socketFavorites.emit('deleteCountry',event.target.id,this.favorites,this.token)
     },
     detail:function(event){
-      this.$emit('detail',event.target.id);
+      
+      this.$emit('detil',event.target.id);
     }
      
   },

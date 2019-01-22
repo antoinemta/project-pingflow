@@ -1,6 +1,6 @@
 <template>
   <header class="row bg-dark">
-     <div class="col-xl-3 py-3 bg-success logoHeader" @click='backHome'>
+     <div class="col-xl-3 py-3 bg-success logoHeader"  @click="switchComponent('home')">
        Lorem Ipsum !
      </div>
       <div class="col-xl-4 bg-danger pr-5">
@@ -9,7 +9,7 @@
             <input type="text" class="w-100 my-1" placeholder="Tape a country" v-model="countrySearched" />
           </div>
           <div class="col-md-3 border">
-            <input type="submit" class="btn btn-success w-100"   @click='sendSearch'/>
+            <input type="submit" class="btn btn-success w-100" @click='sendSearch'/>
           </div>
         </div>
        </div>
@@ -28,13 +28,13 @@
             <input type="submit" value="Log in" class="btn btn-success w-100" @click="conex" />
           </div>
           <div class="col-md-2 my-1 px-2 border" v-else>
-            <input type="submit" value="Favorites" class="btn btn-success w-100"  @click="login"/>
+            <input type="submit" value="Favorites" class="btn btn-success w-100"  @click="switchComponent('favorites')"/>
           </div>
           <div class="col-md-2 my-1 px-2 border" v-if="!loged">
-            <input type="submit" value="Log up" class="btn btn-success w-100" @click="login" />
+            <input type="submit" value="Log up" class="btn btn-success w-100" @click="switchComponent('registration')" />
           </div>
           <div class="col-md-2 my-1 px-2 border" v-else>
-            <input type="submit" value="Deco" class="btn btn-success w-100" @click="deco" />
+            <input type="submit" value="Deco" class="btn btn-success w-100" @click="switchComponent('deco')" />
           </div>
           
           </div>
@@ -62,18 +62,13 @@
     }
   },
   methods:{
+    switchComponent:function(event){
+      this.userLog.pseudonyme="";
+      this.userLog.password="";
+      this.$emit('switchComponent',event)
+    },
     sendSearch:function() {
       this.socketHeader.emit('countrySearched',this.countrySearched);
-    }
-    ,
-    login:function(){
-      this.$emit('login');
-    },
-    backHome:function(){
-      this.$emit('backHome');
-    },
-    deco:function(){
-      this.$emit('deco');
     },
     conex:function(){
       this.reponseMessage.inputPseu=false;
