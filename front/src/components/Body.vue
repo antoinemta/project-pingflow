@@ -1,5 +1,5 @@
 <template>
-  <Detail :token="token" :socketDetail="socketBody" v-if="loged && detail"/>
+  <Detail :country="country" :token="token" :socketDetail="socketBody" v-if="loged && detail"/>
   <Home :token="token" :favorites="favorites" :socketHome="socketBody" v-else-if="logVue && !detail"/>
   <Registration :socketRegistration="socketBody" v-else-if="!logVue && !loged && !detail"/>
   <Favorites :token="token" :favorites="favorites" :socketFavorites="socketBody" @detail="detailFonc" v-else/>
@@ -33,13 +33,13 @@ export default {
     detail:Boolean
   },
   data(){return{
-    
+      country:""
     }
   },
   methods:{
     detailFonc:function (event) {
       this.detail=true;
-      
+      this.country=event;
       
       
     }

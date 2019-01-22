@@ -34,10 +34,7 @@
          <div id="map" class="border"></div>
       </div>
       <div class="col-12 containerForm border">
-        <div class="col-12 h-50 border">
-        <input type="text" class="h-100 w-100 inputComment" />
-        </div>
-        <div class="col-12 pt-4 text-center border"><button class="btn btn-danger btn-lg">Post it</button></div>
+       
       </div>
      </div>
   </section>
@@ -86,7 +83,7 @@ export default {
        this.socketHome.emit('addCountry',this.favorites);
      }
      else{
-       
+       alert('no')
      }
     }
   },

@@ -94,11 +94,11 @@ io.sockets.on("connection", socket => {
     let res = resp[resp.length - 1];
     let db = new sqlite3.Database("./findyourcountry.db");
     db.run(
-      `INSERT INTO favorites (token, country, flag, capital, continent, money, population, lat, lng) VALUES ('${
+      `INSERT INTO favorites (token, country, flag, capital, continent, money, population, lat, lng, comment) VALUES ('${
         res.token
       }','${res.country}', '${res.flag}','${res.capital}','${res.continent}','${
         res.money
-      }','${res.population}','${res.lat}','${res.lng}')`,
+      }','${res.population}','${res.lat}','${res.lng}','etrher')`,
       err => {
         if (err) {
           return false;
@@ -124,6 +124,43 @@ io.sockets.on("connection", socket => {
         }
       }
     );
+    db.close();
+  });
+
+  socket.on("modifComment", (comment, country, token) => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+    console.log(comment);
+    console.log(country);
+    console.log(token);
+    db.run(
+      `UPDATE favorites SET comment='${comment}' WHERE token='${token}' AND country='${country}'`,
+      err => {
+        if (err) {
+          console.log(err);
+          return false;
+        } else {
+          console.log("okay");
+        }
+      }
+    );
+    db.close();
+  });
+
+  socket.on("fetchCountry", (country, token) => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+
+    db.all(
+      `SELECT country, flag, capital, continent, money, population, lat, lng, comment FROM favorites WHERE token='${token}' AND country='${country}'`,
+      (err, data) => {
+        if (err) {
+          return false;
+        } else {
+          console.log(data);
+          socket.emit("recupFetch", data);
+        }
+      }
+    );
+
     db.close();
   });
 

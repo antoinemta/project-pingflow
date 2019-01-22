@@ -35,9 +35,9 @@
       </div>
       <div class="col-12 containerForm border">
         <div class="col-12 h-50 border">
-        <input type="text" class="h-100 w-100 inputComment" />
+        <input type="text" class="h-100 w-100 inputComment" :placeholder="comment"  v-model="commentModif"/>
         </div>
-        <div class="col-12 pt-4 text-center border"><button class="btn btn-danger btn-lg">Post it</button></div>
+        <div class="col-12 pt-4 text-center border"><button class="btn btn-danger btn-lg" @click="changeComment">Post it</button></div>
       </div>
      </div>
   </section>
@@ -54,12 +54,13 @@ export default {
   props: {
     socketDetail: Object,
     favorites:Object,
-    token:String
+    token:String,
+    country:String
   },
   data(){return{
     countrySelec:{
     token:this.token,
-    country:"",
+    country:this.country,
     capital:"",
     region:"",
     population:0,
@@ -69,7 +70,9 @@ export default {
     lng:0},
     map:null,
     markerGroup:null,
-    marker:null
+    marker:null,
+    comment:"",
+    commentModif:""
     
     }
   },
@@ -78,21 +81,28 @@ export default {
 
       /* This is an calling to server to recup the data */
       
+    },
+    changeComment:function(){
+      this.comment=this.commentModif;
+
+      this.socketDetail.emit('modifComment',this.comment, this.countrySelec.country, this.countrySelec.token);
+
     }
-    
-    
   },
   mounted() {
+    this.socketDetail.emit('fetchCountry',this.country,this.token);
     /* Connection to server created */
-    this.socketHome.on('resApi',(res)=>{
-        this.countrySelec.country=res[0].name;
+    this.socketDetail.on('recupFetch',(res)=>
+    {
+        this.countrySelec.country=res[0].country;
         this.countrySelec.capital=res[0].capital;
-        this.countrySelec.region=res[0].region;
+        this.countrySelec.region=res[0].continent;
         this.countrySelec.population=res[0].population;
-        this.countrySelec.money=res[0].currencies[0].name;
+        this.countrySelec.money=res[0].money;
         this.countrySelec.flag=res[0].flag;
-        this.countrySelec.lat=res[0].latlng[0];
-        this.countrySelec.lng=res[0].latlng[1];
+        this.countrySelec.lat=res[0].lat;
+        this.countrySelec.lng=res[0].lng;
+        this.comment=res[0].comment;
         this.markerGroup.removeLayer(this.marker);
         this.marker = L.marker([this.countrySelec.lat,this.countrySelec.lng]).addTo(this.markerGroup);
         this.map.setView([this.countrySelec.lat,this.countrySelec.lng], 1.5);
