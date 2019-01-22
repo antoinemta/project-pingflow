@@ -1,5 +1,5 @@
 <template>
-  <Home :socketHome="socketBody" v-if="logVue"/>
+  <Home :token="token" :favorites="favorites" :socketHome="socketBody" v-if="logVue"/>
   <Registration :socketRegistration="socketBody" v-else-if="!logVue && !loged"/>
   <Favorites :favorites="favorites" v-else/>
 </template>
@@ -25,7 +25,8 @@ export default {
     socketBody: Object,
     logVue: Boolean,
     loged:Boolean,
-    favorites:Object
+    favorites:Object,
+    token:String
   },
   data(){return{
     

@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <Header :loged="loged" :socketHeader="socket" @login="login" @backHome="backHome" @deco="deco" />
-    <Body :socketBody="socket" :logVue="logVue" :loged="loged" :favorites="favorites" />
+    <Body :socketBody="socket" :logVue="logVue" :loged="loged" :favorites="favorites" :token="token" />
     <Footer />
   </div>
 </template>
@@ -57,11 +57,11 @@ export default {
     socket.emit('check',this.token);
   }
 
-  socket.on('recupToken',(res)=>{
-    alert(res.favorites)
-    localStorage.setItem('token',res.token)
+  socket.on('recupToken',(token, favorites)=>{
+    localStorage.setItem('token',token)
     this.loged=true;
-    this.favorites=res.favorites;
+    this.favorites=favorites;
+    this.token=token;
   });
     
   }

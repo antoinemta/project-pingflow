@@ -6,16 +6,18 @@
      </div>
    <div class="col-12 px-5">
     <div class="row d-flex justify-content-center px-5">
-      <div class="col-1 m-3 px-0 border">
+
+      <div class="col-1 m-3 px-0 border" v-for="favorite in this.favorites">
         <div class="col-12 py-2 p-3">
-          <img class="w-100" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/langfr-225px-Flag_of_France.svg.png" />
+          <img class="w-100" :src="favorite.flag" />
         </div>
-        <div class="col-12 contentBlockFavorite px-2">Lorem ipsum</div>
+        <div class="col-12 contentBlockFavorite px-2">{{ favorite.country }}</div>
           <div class="col-12 text-center py-2">
-            <button class="btn btn-success mb-1 py-1 px-2">delete</button>
+            <button :id="favorite.country" class="btn btn-success mb-1 py-1 px-2" @click="deleteCountry">delete</button>
           </div>
         </div>
       </div>
+
     </div>
   </div>
  </section>
@@ -35,13 +37,17 @@ export default {
     favorites:Object
   },
   data(){return{
-    
+      
     }
   },
   methods:{
+    deleteCountry:function(event) {
+      alert(event.target.id)
+    }
      
   },
   mounted() {
+    
   },
   updated(){
      

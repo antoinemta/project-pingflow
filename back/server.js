@@ -23,11 +23,7 @@ io.sockets.on("connection", socket => {
               if (err) {
                 return false;
               } else {
-                let infoUser = {
-                  token: res,
-                  favorites: data
-                };
-                socket.emit("recupToken", infoUser);
+                socket.emit("recupToken", res, data);
               }
             }
           );
@@ -94,6 +90,26 @@ io.sockets.on("connection", socket => {
     db.close();
   });
 
+  socket.on("addCountry", resp => {
+    let res = resp[resp.length - 1];
+    let db = new sqlite3.Database("./findyourcountry.db");
+    db.run(
+      `INSERT INTO favorites (token, country, flag, capital, continent, money, population, lat, lng) VALUES ('${
+        res.token
+      }','${res.country}', '${res.flag}','${res.capital}','${res.continent}','${
+        res.money
+      }','${res.population}','${res.lat}','${res.lng}')`,
+      err => {
+        if (err) {
+          return false;
+        } else {
+          socket.emit("recupToken", res.token, resp);
+        }
+      }
+    );
+    db.close();
+  });
+
   socket.on("login", res => {
     let db = new sqlite3.Database("./findyourcountry.db");
     let response = {
@@ -118,12 +134,7 @@ io.sockets.on("connection", socket => {
                   if (err) {
                     return false;
                   } else {
-                    let infoUser = {
-                      token: rows[0].token,
-                      favorites: data
-                    };
-
-                    socket.emit("recupToken", infoUser);
+                    socket.emit("recupToken", rows[0].token, data);
                   }
                 }
               );

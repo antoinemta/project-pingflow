@@ -2,30 +2,30 @@
   <section class="row body">
     <div class="col-xl-4 infosSearchedBody pb-5 bg-info" >
       <div class="col-sm-8 pb-5">
-        <div class="col-12 text-center titleLeft"><span>{{ country }}</span></div>
+        <div class="col-12 text-center titleLeft"><span>{{ countrySelec.country }}</span></div>
         <div class="col-12">
       <div class="col-12 py-4 border text-center">
-        <img class="w-25" :src="this.flag" />
+        <img class="w-25" :src="this.countrySelec.flag" />
 
       </div>
       <div class="col-12 border text-center">
-        {{ capital }}
+        {{ countrySelec.capital }}
 
       </div>
       <div class="col-12 border text-center">
-        {{ region }}
+        {{ countrySelec.region }}
 
       </div>
      
       <div class="col-12 border text-center">
-        {{ money }}
+        {{ countrySelec.money }}
       </div>
        <div class="col-12 border text-center">
-         {{ population }}
+         {{ countrySelec.population }}
       </div>
       </div>
       <div class="col-12 pb-5 d-flex justify-content-center">
-          <button class="btn btn-success w-50 mt-4">add</button>
+          <button class="btn btn-success w-50 mt-4" @click="addCountry">add</button>
         </div>      
       </div>
     </div>
@@ -52,9 +52,13 @@ export default {
 
   name: 'Home',
   props: {
-    socketHome: Object
+    socketHome: Object,
+    favorites:Object,
+    token:String
   },
   data(){return{
+    countrySelec:{
+    token:this.token,
     country:"",
     capital:"",
     region:"",
@@ -62,10 +66,11 @@ export default {
     money:"",
     flag:"",
     lat:0,
-    lng:0,
+    lng:0},
     map:null,
     markerGroup:null,
     marker:null
+    
     }
   },
   methods:{
@@ -73,22 +78,32 @@ export default {
 
       /* This is an calling to server to recup the data */
       
+    },
+    addCountry:function(){
+     if (this.favorites.filter(country => country.country==this.countrySelec.country).length==0)
+     {
+       this.favorites.push(this.countrySelec);
+       this.socketHome.emit('addCountry',this.favorites);
+     }
+     else{
+       
+     }
     }
   },
   mounted() {
     /* Connection to server created */
     this.socketHome.on('resApi',(res)=>{
-        this.country=res[0].name;
-        this.capital=res[0].capital;
-        this.region=res[0].region;
-        this.population=res[0].population;
-        this.money=res[0].currencies[0].name;
-        this.flag=res[0].flag;
-        this.lat=res[0].latlng[0];
-        this.lng=res[0].latlng[1];
+        this.countrySelec.country=res[0].name;
+        this.countrySelec.capital=res[0].capital;
+        this.countrySelec.region=res[0].region;
+        this.countrySelec.population=res[0].population;
+        this.countrySelec.money=res[0].currencies[0].name;
+        this.countrySelec.flag=res[0].flag;
+        this.countrySelec.lat=res[0].latlng[0];
+        this.countrySelec.lng=res[0].latlng[1];
         this.markerGroup.removeLayer(this.marker);
-        this.marker = L.marker([this.lat,this.lng]).addTo(this.markerGroup);
-        this.map.setView([this.lat,this.lng], 1.5);
+        this.marker = L.marker([this.countrySelec.lat,this.countrySelec.lng]).addTo(this.markerGroup);
+        this.map.setView([this.countrySelec.lat,this.countrySelec.lng], 1.5);
     });
     
 
