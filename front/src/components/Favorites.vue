@@ -8,8 +8,8 @@
     <div class="row d-flex justify-content-center px-5">
 
       <div class="col-1 m-3 px-0 border" v-for="favorite in this.favorites">
-        <div class="col-12 py-2 p-3">
-          <img class="w-100" :src="favorite.flag" />
+        <div  class="col-12 py-2 p-3">
+          <img :id="favorite.country" class="w-100" :src="favorite.flag"  @click="detail"/>
         </div>
         <div class="col-12 contentBlockFavorite px-2">{{ favorite.country }}</div>
           <div class="col-12 text-center py-2">
@@ -34,7 +34,8 @@ export default {
   props: {
     socketFavorites: Object,
     logVue: Boolean,
-    favorites:Object
+    favorites:Object,
+    token:String
   },
   data(){return{
       
@@ -42,7 +43,10 @@ export default {
   },
   methods:{
     deleteCountry:function(event) {
-      alert(event.target.id)
+      this.socketFavorites.emit('deleteCountry',event.target.id,this.favorites,this.token)
+    },
+    detail:function(event){
+      this.$emit('detail',event.target.id);
     }
      
   },

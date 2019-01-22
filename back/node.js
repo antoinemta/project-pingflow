@@ -14,7 +14,8 @@ db.serialize(function() {
 db.run("DELETE FROM favorites", err => {});
 db.run("DELETE FROM users", err => {});
 
-/*db.each(
+/*
+db.each(
   "SELECT rowid, token, country, flag, capital, continent, money, population, lat, lng FROM favorites",
   (err, row) => {
     console.log(

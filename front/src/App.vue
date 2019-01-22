@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <Header :loged="loged" :socketHeader="socket" @login="login" @backHome="backHome" @deco="deco" />
-    <Body :socketBody="socket" :logVue="logVue" :loged="loged" :favorites="favorites" :token="token" />
+    <Body :detail="detail" :socketBody="socket" :logVue="logVue" :loged="loged" :favorites="favorites" :token="token" />
     <Footer />
   </div>
 </template>
@@ -32,6 +32,7 @@ export default {
       socket: socket,
       logVue: true,
       loged: false,
+      detail:false,
       token: token,
       favorites:[]
     }
@@ -39,14 +40,18 @@ export default {
   ,
   methods:{
     login:function() {
+      
+      this.detail=false;
       this.logVue=false;
       
     },
     backHome:function(){
       this.logVue=true;
+      this.detail=false;
     },
     deco:function(){
       this.loged=false;
+      this.detail=false;
       this.favorites=[];
       localStorage.removeItem('token');
     }

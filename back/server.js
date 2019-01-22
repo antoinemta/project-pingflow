@@ -110,6 +110,23 @@ io.sockets.on("connection", socket => {
     db.close();
   });
 
+  socket.on("deleteCountry", (country, favorites, token) => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+    const supp = favorites.filter(name => name.country != country);
+
+    db.run(
+      `DELETE FROM favorites WHERE token='${token}' AND country='${country}'`,
+      err => {
+        if (err) {
+          return false;
+        } else {
+          socket.emit("recupToken", token, supp);
+        }
+      }
+    );
+    db.close();
+  });
+
   socket.on("login", res => {
     let db = new sqlite3.Database("./findyourcountry.db");
     let response = {

@@ -1,7 +1,8 @@
 <template>
-  <Home :token="token" :favorites="favorites" :socketHome="socketBody" v-if="logVue"/>
-  <Registration :socketRegistration="socketBody" v-else-if="!logVue && !loged"/>
-  <Favorites :favorites="favorites" v-else/>
+  <Detail :token="token" :socketDetail="socketBody" v-if="loged && detail"/>
+  <Home :token="token" :favorites="favorites" :socketHome="socketBody" v-else-if="logVue && !detail"/>
+  <Registration :socketRegistration="socketBody" v-else-if="!logVue && !loged && !detail"/>
+  <Favorites :token="token" :favorites="favorites" :socketFavorites="socketBody" @detail="detailFonc" v-else/>
 </template>
 
 
@@ -12,6 +13,7 @@
 import Home from './Home.vue'
 import Registration from './Registration.vue'
 import Favorites from './Favorites.vue'
+import Detail from './Detail.vue'
 
 export default {
 
@@ -19,20 +21,28 @@ export default {
   components:{
     Home,
     Registration,
-    Favorites
+    Favorites,
+    Detail
   },
   props: {
     socketBody: Object,
     logVue: Boolean,
     loged:Boolean,
     favorites:Object,
-    token:String
+    token:String,
+    detail:Boolean
   },
   data(){return{
     
     }
   },
   methods:{
+    detailFonc:function (event) {
+      this.detail=true;
+      
+      
+      
+    }
       
   },
   mounted() {
