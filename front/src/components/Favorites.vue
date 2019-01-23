@@ -4,12 +4,12 @@
      <div class="col-12 text-center py-4">
       <span class="titleFavoritesPage">Your favorite</span>
      </div>
-   <div class="col-12 px-5">
+    <div class="col-12 px-5">
     <div class="row d-flex justify-content-center px-5">
 
       <div class="col-xl-1 col-lg-2 col-md-3 col-sm-4 m-3 px-0 border" v-for="favorite in this.favorites">
         <div  class="col-12 py-2 p-3">
-          <img :id="favorite.country" class="w-100" :src="favorite.flag"  @click="detail"/>
+          <img :id="favorite.country" class="w-100" :src="favorite.flag"  @click="switchDetail"/>
         </div>
         <div class="col-12 contentBlockFavorite px-2">{{ favorite.country }}</div>
           <div class="col-12 text-center py-2">
@@ -19,14 +19,13 @@
       </div>
 
     </div>
-  </div>
- </section>
-</template>
+   </div>
+  </section>
+ </template>
 
 
 
 <script>
-
 
 export default {
 
@@ -37,107 +36,29 @@ export default {
     favorites:Object,
     token:String
   },
-  data(){return{
-      
-    }
-  },
   methods:{
     deleteCountry:function(event) {
       this.socketFavorites.emit('deleteCountry',event.target.id,this.favorites,this.token)
     },
-    detail:function(event){
-      
-      this.$emit('detil',event.target.id);
-    }
-     
-  },
-  mounted() {
-    
-  },
-  updated(){
-     
+    switchDetail:function(event){ 
+      this.$emit('switchDetail',event.target.id);
+    }  
   }
-
 }
-
 
 </script>
 
 
+
 <style scoped>
-
-
-.inputsGroupLog{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.titleLeft
-{
-  padding-bottom:11vh;
-}
 
 .titleFavoritesPage{
   font-size:2.5em;
   font-weight:bold;
 }
-
-.infosSearchedBody
-{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
 .contentBlockFavorite{
   word-wrap:break-word;
   text-align:center;
-}
-
-.textAlignCenter{
-  text-align:center;
-}
-
-.body {
- min-height:80vh;
-}
-
-.containerForm{
-  padding-left:6%;
-  padding-right:6%;
-  height:40%;
-}
-
-.containerMap{
-  height:60%;
-  display:flex;
-  align-items:center;
-  padding-left:17%;
-  padding-right:17%;
-
-}
-.containerLogin{
-
-  display:flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#map
-{
-  width:100%;
-  height:90%;
-}
-
-@media (max-width: 800px) {
-  .containerForm{
-    height: 40vh;
-  }
-
-  .containerMap{
-    height:60vh;
-  }
 }
 
 </style>

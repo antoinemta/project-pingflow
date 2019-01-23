@@ -174,7 +174,7 @@ io.sockets.on("connection", socket => {
   socket.on("login", res => {
     let db = new sqlite3.Database("./findyourcountry.db");
     let response = {
-      inputPseu: false,
+      inputPseudo: false,
       inputPass: false
     };
     db.all(
@@ -206,7 +206,7 @@ io.sockets.on("connection", socket => {
               socket.emit("falseLog", response);
             }
           } else {
-            response.inputPseu = true;
+            response.inputPseudo = true;
             socket.emit("falseLog", response);
           }
         }

@@ -19,11 +19,11 @@
           <div class="col-md-4 pr-3 pl-0 border" v-if="!loged">
             <input type="text" class="w-100 my-1" placeholder="pseudonyme" v-model="userLog.pseudonyme" />
           </div>
-          <span class="pr-3 text-danger" v-if="reponseMessage.inputPseudo">Pseudonyme inexistant</span>
+          <span class="pr-3 text-danger" v-if="responseMessage.inputPseudo">Pseudonyme inexistant</span>
           <div class="col-md-4 pl-0 pr-3 border" v-if="!loged">
             <input type="password" class="w-100 my-1" placeholder="password" v-model="userLog.password" />
           </div>
-          <span class="pr-3 text-danger"  v-if="reponseMessage.inputPass">Mot de passe incorect</span>
+          <span class="pr-3 text-danger"  v-if="responseMessage.inputPass">Mot de passe incorect</span>
           <div class="col-md-2 my-1 px-2 border" v-if="!loged">
             <input type="submit" value="Log in" class="btn btn-success w-100" @click="connection" />
           </div>
@@ -58,7 +58,7 @@
         pseudonyme:"",
         password:""
         },
-      reponseMessage:{
+      responseMessage:{
         inputPseudo:false,
         inputPass:false
       }
@@ -74,14 +74,14 @@
       this.socketHeader.emit('countrySearched',this.countrySearched);
     },
     connection:function(){
-      this.reponseMessage.inputPseu=false;
-      this.reponseMessage.inputPass=false;
+      this.responseMessage.inputPseudo=false;
+      this.responseMessage.inputPass=false;
       this.socketHeader.emit('login',this.userLog);
     }
   },
   mounted(){
     this.socketHeader.on('falseLog',(res)=>{
-      this.reponseMessage=res;
+      this.responseMessage=res;
     });
   }
 }

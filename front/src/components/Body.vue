@@ -1,7 +1,7 @@
 <template>
   <Detail :token="token" :country="country"  :socketDetail="socketBody" v-if="this.actifComponent=== 'detail'"/>
   <Home :token="token" :loged="loged" :favorites="favorites" :socketHome="socketBody" v-else-if="this.actifComponent=== 'home'" />
-  <Favorites :token="token" :favorites="favorites" :socketFavorites="socketBody" @detil="detil" v-else-if="this.actifComponent==='favorites'" />
+  <Favorites :token="token" :favorites="favorites" :socketFavorites="socketBody" @switchDetail="switchDetail" v-else-if="this.actifComponent==='favorites'" />
   <Registration :socketRegistration="socketBody" v-else/>
 </template>
 
@@ -37,7 +37,7 @@ export default {
     }
   },
   methods:{
-    detil:function (event) {
+    switchDetail:function (event) {
       this.$emit('switchComponent','detail');
       this.country=event;
       }
