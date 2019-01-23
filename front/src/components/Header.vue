@@ -1,6 +1,6 @@
 <template>
   <header class="row bg-dark">
-     <div class="col-xl-3 py-3 bg-success logoHeader"  @click="switchComponent('home')">
+     <div class="col-xl-3 py-3 bg-success titleHeader"  @click="switchComponent('home')">
        Lorem Ipsum !
      </div>
       <div class="col-xl-4 bg-danger pr-5">
@@ -9,7 +9,7 @@
             <input type="text" class="w-100 my-1" placeholder="Tape a country" v-model="countrySearched" />
           </div>
           <div class="col-md-3 border">
-            <input type="submit" class="btn btn-success w-100" @click='sendSearch'/>
+            <input type="submit" class="btn btn-success w-100" @click="sendSearch"/>
           </div>
         </div>
        </div>
@@ -19,13 +19,13 @@
           <div class="col-md-4 pr-3 pl-0 border" v-if="!loged">
             <input type="text" class="w-100 my-1" placeholder="pseudonyme" v-model="userLog.pseudonyme" />
           </div>
-          <span class="pr-3 text-danger" v-if="reponseMessage.inputPseu">Pseudonyme inexistant</span>
+          <span class="pr-3 text-danger" v-if="reponseMessage.inputPseudo">Pseudonyme inexistant</span>
           <div class="col-md-4 pl-0 pr-3 border" v-if="!loged">
             <input type="password" class="w-100 my-1" placeholder="password" v-model="userLog.password" />
           </div>
           <span class="pr-3 text-danger"  v-if="reponseMessage.inputPass">Mot de passe incorect</span>
           <div class="col-md-2 my-1 px-2 border" v-if="!loged">
-            <input type="submit" value="Log in" class="btn btn-success w-100" @click="conex" />
+            <input type="submit" value="Log in" class="btn btn-success w-100" @click="connection" />
           </div>
           <div class="col-md-2 my-1 px-2 border" v-else>
             <input type="submit" value="Favorites" class="btn btn-success w-100"  @click="switchComponent('favorites')"/>
@@ -34,7 +34,7 @@
             <input type="submit" value="Log up" class="btn btn-success w-100" @click="switchComponent('registration')" />
           </div>
           <div class="col-md-2 my-1 px-2 border" v-else>
-            <input type="submit" value="Deco" class="btn btn-success w-100" @click="switchComponent('deco')" />
+            <input type="submit" value="Deco" class="btn btn-success w-100" @click="switchComponent('disconnected')" />
           </div>
           
           </div>
@@ -54,10 +54,13 @@
   data(){
     return{
       countrySearched:"",
-      userLog:{pseudonyme:"",
-      password:""},
-      reponseMessage:{inputPseu:false,
-      inputPass:false
+      userLog:{
+        pseudonyme:"",
+        password:""
+        },
+      reponseMessage:{
+        inputPseudo:false,
+        inputPass:false
       }
     }
   },
@@ -70,7 +73,7 @@
     sendSearch:function() {
       this.socketHeader.emit('countrySearched',this.countrySearched);
     },
-    conex:function(){
+    connection:function(){
       this.reponseMessage.inputPseu=false;
       this.reponseMessage.inputPass=false;
       this.socketHeader.emit('login',this.userLog);
@@ -98,25 +101,12 @@ header{
   height:100%;
 }
 
-.logoHeader{
+.titleHeader{
   color:white;
   font-size:2.0em;
   font-weight:bold;
   display:flex;
   align-items:center;
   justify-content:center;
-}
-
-.textAlignRight{
-  text-align:right;
-}
-
-.textAlignCenter
-{
-  text-align:center;
-}
-
-.widthSelect{
-  width:11%;
 }
 </style>

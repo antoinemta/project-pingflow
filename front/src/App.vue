@@ -45,7 +45,7 @@ export default {
 
     switchComponent:function(event){
 
-      if (event=='deco'){
+      if (event=='disconnected'){
         this.loged=false;
         this.favorites=[];
         localStorage.removeItem('token');
