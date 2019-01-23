@@ -52,6 +52,10 @@ export default {
 
 <style scoped>
 
+.body {
+ min-height:80vh;
+}
+
 .titleFavoritesPage{
   font-size:2.5em;
   font-weight:bold;
