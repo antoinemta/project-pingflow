@@ -1,15 +1,45 @@
 <template>
-  <header class="row bg-dark text-white py-4">
-      <div class="col-lg-2 textAlignRight pr-5"><h2>Find your city !</h2></div>
-      <div class="col-lg-4 px-5"><input type="text" class="w-50 mr-3" placeholder="Tape a postal code city" v-model="searched" />Pays :<select class="widthSelect ml-2" v-model="countrySearched" @change="selection"><option>fr</option><option>us</option></select><button class="btn btn-success ml-4 mt-2" @click="search">Search</button></div>
-    <div class="col px-0 pr-5 textAlignRight">
-      <span class="pr-3">Connect you !</span>
-      <span>Go to your favorites</span>
-      <input type="text" class="ml-2" />
-      <input type="password" class="ml-3" />
-      <button class="btn btn-success ml-4 mb-2 mt-2">Go</button>
-      <button class="btn btn-success ml-4" @click="connect">Log in</button>
-    </div>
+  <header class="row bg-dark bg-dark">
+     <div class="col-xl-3 py-3 titleHeader"  @click="switchComponent('home')">
+       Find your country !
+     </div>
+      <div class="col-xl-4 pr-5">
+        <div class="row py-3 inputsGroupSearchHeader">
+          <div class="col-md-6">
+            <input type="text" class="w-100 my-1" placeholder="Tape a country" v-model="countrySearched" />
+          </div>
+          <div class="col-md-3">
+            <input type="submit" value="search" class="btn btn-success w-100" @click="sendSearch"/>
+          </div>
+        </div>
+       </div>
+     <div class="col-xl-5 d-flex justify-content-center">
+       <div class="col-md-10"> 
+        <div class="row py-3 inputsGroupSearchHeader">
+          <div class="col-md-4 pr-3 pl-0" v-if="!loged">
+            <input type="text" class="w-100 my-1" placeholder="pseudonyme" v-model="userLog.pseudonyme" />
+          </div>
+          <span class="pr-3 text-danger" v-if="responseMessage.inputPseudo">Pseudonyme inexistant</span>
+          <div class="col-md-4 pl-0 pr-3" v-if="!loged">
+            <input type="password" class="w-100 my-1" placeholder="password" v-model="userLog.password" />
+          </div>
+          <span class="pr-3 text-danger"  v-if="responseMessage.inputPass">Mot de passe incorect</span>
+          <div class="col-md-2 my-1 px-2" v-if="!loged">
+            <input type="submit" value="Log in" class="btn btn-success w-100" @click="connection" />
+          </div>
+          <div class="col-md-2 my-1 px-2" v-else>
+            <input type="submit" value="Favorites" class="btn btn-success w-100"  @click="switchComponent('favorites')"/>
+          </div>
+          <div class="col-md-2 my-1 px-2" v-if="!loged">
+            <input type="submit" value="Sign on" class="btn btn-success w-100" @click="switchComponent('registration')" />
+          </div>
+          <div class="col-md-2 my-1 px-2" v-else>
+            <input type="submit" value="Log out" class="btn btn-success w-100" @click="switchComponent('disconnected')" />
+          </div>
+          
+          </div>
+        </div>
+     </div>
   </header>
 </template>
 
@@ -18,24 +48,41 @@
   export default {
   name: 'Header',
   props:{
-    connected:Boolean
+    socketHeader:Object,
+    loged:Boolean
   },
   data(){
     return{
-      searched:"",
-      countrySearched:"fr"
+      countrySearched:"",
+      userLog:{
+        pseudonyme:"",
+        password:""
+        },
+      responseMessage:{
+        inputPseudo:false,
+        inputPass:false
+      }
     }
   },
   methods:{
-    connect: function(){
-      this.$emit('connect');
+    switchComponent:function(event){
+      this.userLog.pseudonyme="";
+      this.userLog.password="";
+      this.$emit('switchComponent',event)
     },
-    search: function(){
-      this.$emit('search',this.searched);
+    sendSearch:function() {
+      this.socketHeader.emit('countrySearched',this.countrySearched, Boolean);
     },
-    selection:function(){
-      this.$emit('selection',this.countrySearched);
+    connection:function(){
+      this.responseMessage.inputPseudo=false;
+      this.responseMessage.inputPass=false;
+      this.socketHeader.emit('login',this.userLog);
     }
+  },
+  mounted(){
+    this.socketHeader.on('falseLog',(res)=>{
+      this.responseMessage=res;
+    });
   }
 }
 </script>
@@ -46,22 +93,20 @@ header{
   min-height:10vh;
 }
 
-.textAlignRight{
-  text-align:right;
-}
-
-.textAlignCenter
+.inputsGroupSearchHeader
 {
-  text-align:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100%;
 }
 
-.widthSelect{
-  width:11%;
-}
-
-@media (max-width: 800px) {
-  .textAlignRight {
-  text-align:center;
-  }
+.titleHeader{
+  color:white;
+  font-size:2.0em;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 </style>

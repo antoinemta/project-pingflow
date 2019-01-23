@@ -1,18 +1,29 @@
 <template>
   <div class="container-fluid">
-    <Header @connect="connect" @search="search" @selection="selection"/>
-    <Body :connected="connected" :searched="searched" :selected="selected"/>
+    <Header :loged="loged"
+      :socketHeader="socket"
+      @switchComponent="switchComponent" />
+      <Body :actifComponent="actifComponent" 
+      @switchComponent="switchComponent"
+      :countrySelected="countrySelected"
+      :socketBody="socket" 
+      :loged="loged" 
+      :favorites="favorites" 
+      :token="token" />
     <Footer />
   </div>
 </template>
 
-<!-- I haven't yet used the routes, 
-so I use props to change components . -->
+
 
 <script>
+import io from "socket.io-client";
 import Header from './components/Header.vue'
 import Body from './components/Body.vue'
 import Footer from './components/Footer.vue'
+
+const socket = io.connect("http://localhost:8081");
+const token = localStorage.getItem("token");
 
 export default {
   name: 'app',
@@ -23,24 +34,50 @@ export default {
   },
   data(){
     return{
-      connected:true,
-      searched:"",
-      selected:"fr"
+      socket: socket,
+      loged: false,
+      token: token,
+      favorites:[],
+      actifComponent:"home",
+      countrySelected:{}
     }
   }
   ,
   methods:{
-   connect:function (){
-     this.connected=false
-   },
-   search:function(event){
-     this.connected=true
-      this.searched=event
-   },
-   selection:function(event){
-     this.selected=event
-     
-   }
+
+    switchComponent:function(event){
+      if (event=='disconnected'){
+        this.actifComponent='disconnected'
+        this.loged=false;
+        this.favorites=[];
+        localStorage.removeItem('token');
+      }
+      else{
+      this.actifComponent=event;
+    }
+    }
+    
+  }
+  ,mounted(){
+   
+  if (this.token){
+    socket.emit('checkingToken',this.token);
+  }
+
+  socket.on('log',(token, favorites)=>{
+    localStorage.setItem('token',token)
+    this.loged=true;
+    this.favorites=favorites;
+    this.token=token;
+  });
+    
+
+  this.socket.on('recupFetch',(data)=>{
+      this.actifComponent='detail'
+      this.countrySelected=data;
+
+    });
+
   }
 }
 </script>

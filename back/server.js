@@ -1,129 +1,204 @@
 const express = require("express");
 const app = express();
 const http = require("http");
-const fetch = require("node-fetch");
-const port = 8081;
-/*const sqlite3 = require("sqlite3").verbose();
-let db = new sqlite3.Database("dbMonuments");
-const bodyParser = require("body-parser");
-const request = require("request");
-const passport = require("passport");
-const cors = require("cors");
-require("./passport-strategy");
-const {
-  PORT_NUMBER,
-  //DBurl,
-  Database,
-  saltRounds,
-  //connection,
-  client_id,
-  client_secret
-} = require("./conf");
-*/
-
 const server = http.createServer(app);
 const io = require("socket.io").listen(server);
+const axios = require("axios");
+var randtoken = require("rand-token").uid;
+var sqlite3 = require("sqlite3").verbose();
 
 io.sockets.on("connection", socket => {
   console.log("connected");
-
-  /* This is the server that calls the API */
-  socket.on("fetchCity", res => {
-    fetch(`http://api.zippopotam.us/${res.country}/${res.postalCode}`)
-      .then(results => results.json())
-      .then(data => {
-        if (data.places) {
-          let dataFront = {
-            city: data.places[0]["place name"],
-            country: data.country,
-            state: data.places[0].state,
-            lat: data.places[0].latitude,
-            lng: data.places[0].longitude
-          };
-
-          socket.emit("fetchCityResponse", dataFront);
+  socket.on("checkingToken", res => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+    db.all(`SELECT token FROM users WHERE token='${res}'`, (err, rows) => {
+      if (!err) {
+        if (rows.length == 1) {
+          db.all(
+            `SELECT country, flag, capital, continent, money, population, lat, lng FROM favorites WHERE token='${res}'`,
+            (err, data) => {
+              if (!err) {
+                socket.emit("log", res, data);
+              }
+            }
+          );
         }
+      }
+    });
+    db.close();
+    return true;
+  });
+
+  socket.on("countrySearched", (res, alreadyAdded) => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+    axios({
+      method: "get",
+      url: `https://restcountries.eu/rest/v2/name/${res}`
+    })
+      .then(resApi => {
+        db.all(
+          `SELECT country FROM favorites WHERE country='${res}'`,
+          (err, data) => {
+            if (!err) {
+              if (data.length >= 1) {
+                alreadyAdded = true;
+                socket.emit("resApi", resApi.data, alreadyAdded);
+              } else {
+                alreadyAdded = false;
+                socket.emit("resApi", resApi.data, alreadyAdded);
+              }
+            }
+          }
+        );
+        db.close();
+        return true;
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        return false;
       });
+  });
+
+  socket.on("sendLog", res => {
+    let response = {
+      display: [false, false, false],
+      textColor: "",
+      message: ""
+    };
+
+    let db = new sqlite3.Database("./findyourcountry.db");
+    db.all(
+      `SELECT pseudonyme FROM users WHERE pseudonyme='${res.pseudonyme}'`,
+      (err, rows) => {
+        if (!err) {
+          if (rows.length >= 1) {
+            response.display[0] = true;
+            socket.emit("responseInsert", response);
+          } else {
+            db.run(
+              `INSERT INTO users (pseudonyme, password, token) VALUES ('${
+                res.pseudonyme
+              }','${res.password}', '${randtoken(16)}')`,
+              err => {
+                if (!err) {
+                  response.display[2] = true;
+                  response.message = "You have been registred !";
+                  response.textColor = "text-success";
+                  socket.emit("responseInsert", response);
+                }
+              }
+            );
+          }
+        }
+      }
+    );
+    db.close();
+    return true;
+  });
+
+  socket.on("addCountry", resp => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+    let res = resp[resp.length - 1];
+    db.run(
+      `INSERT INTO favorites (token, country, flag, capital, continent, money, population, lat, lng, comment) VALUES ('${
+        res.token
+      }','${res.country}', '${res.flag}','${res.capital}','${res.region}','${
+        res.money
+      }','${res.population}','${res.lat}','${res.lng}','')`,
+      err => {
+        if (!err) {
+          socket.emit("log", res.token, resp);
+        }
+      }
+    );
+    db.close();
+    return true;
+  });
+
+  socket.on("deleteCountry", (country, favorites, token) => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+    const supp = favorites.filter(name => name.country != country);
+
+    db.run(
+      `DELETE FROM favorites WHERE token='${token}' AND country='${country}'`,
+      err => {
+        if (!err) {
+          socket.emit("log", token, supp);
+        }
+      }
+    );
+    db.close();
+    return true;
+  });
+
+  socket.on("modifComment", (comment, country, token) => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+    db.run(
+      `UPDATE favorites SET comment='${comment}' WHERE token='${token}' AND country='${country}'`,
+      err => {
+        if (err) {
+          db.close();
+
+          return false;
+        } else {
+          db.close();
+          return true;
+        }
+      }
+    );
+  });
+
+  socket.on("fetchCountry", (country, token) => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+    db.all(
+      `SELECT country, flag, capital, continent, money, population, lat, lng, comment FROM favorites WHERE token='${token}' AND country='${country}'`,
+      (err, data) => {
+        if (!err) {
+          socket.emit("recupFetch", data[0]);
+        }
+      }
+    );
+    db.close();
+    return true;
+  });
+
+  socket.on("login", res => {
+    let db = new sqlite3.Database("./findyourcountry.db");
+    let response = {
+      inputPseudo: false,
+      inputPass: false
+    };
+    db.all(
+      `SELECT pseudonyme, password, token FROM users WHERE pseudonyme='${
+        res.pseudonyme
+      }'`,
+      (err, rows) => {
+        if (!err) {
+          if (rows.length == 1) {
+            if (rows[0].password == res.password) {
+              db.all(
+                `SELECT country, flag, capital, continent, money, population, lat, lng FROM favorites WHERE token='${
+                  rows[0].token
+                }'`,
+                (err, data) => {
+                  if (!err) {
+                    socket.emit("log", rows[0].token, data);
+                  }
+                }
+              );
+            } else {
+              response.inputPass = true;
+              socket.emit("falseLog", response);
+            }
+          } else {
+            response.inputPseudo = true;
+            socket.emit("falseLog", response);
+          }
+        }
+      }
+    );
+    db.close();
+    return true;
   });
 });
 
-/*
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(cors());
-
-app.post("/informationsMonuments", (req, res) => {
-  let city = req.body.city;
-  let infosMonuments = undefined;
-});
-
-app.use("/login", require("./routes/login"));
-
-app.all(
-  "/*",
-  passport.authenticate("jwt", { session: false }),
-  (req, res, next) => {
-    next();
-  }
-);
-
-app.use(function(req, res) {
-  res.setHeader("Content-Type", "text/plain");
-  res.write("you posted:\n");
-  res.end(JSON.stringify(req.body, null, 2));
-});
-
-app.use((req, res, next) => {
-  res.setHeader("Content-Type", "text/plain");
-  res.status(404).send("Not found");
-});
-
-app.post("/informationsCity", (req, res) => {
-  let capital = req.body.capital;
-  let infosCity = undefined;
-
-  request(
-    {
-      url: "https://api.foursquare.com/v2/venues/explore",
-      method: "GET",
-      qs: {
-        client_id: `${client_id}`,
-        client_secret: `${client_secret}`,
-
-        near: `${city}`,
-        query: "monuments",
-        v: "20180323",
-
-        near: `${capital}`,
-        query: "monuments",
-        v: "20180323",
-
-        limit: 10
-      }
-    },
-    (err, response, body) => {
-      if (err) {
-        console.error(err);
-      } else {
-        infosMonuments = JSON.parse(body).response.groups[0].items;
-        console.log(infosMonuments);
-        res.status(200).send(infosMonuments);
-
-        infosCity = JSON.parse(body).response.groups[0].items;
-        console.log(infosCity);
-        res.status(200).send(infosCity);
-      }
-    }
-  );
-});
-*/
-server.listen(port, err => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(`listening on port ${port}`);
-  }
-});
+server.listen(8081);
