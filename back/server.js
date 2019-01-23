@@ -12,25 +12,16 @@ io.sockets.on("connection", socket => {
   socket.on("checkingToken", res => {
     let db = new sqlite3.Database("./findyourcountry.db");
     db.all(`SELECT token FROM users WHERE token='${res}'`, (err, rows) => {
-      if (err) {
-        db.close();
-        return false;
-      } else {
+      if (!err) {
         if (rows.length == 1) {
           db.all(
             `SELECT country, flag, capital, continent, money, population, lat, lng FROM favorites WHERE token='${res}'`,
             (err, data) => {
-              if (err) {
-                db.close();
-                return false;
-              } else {
+              if (!err) {
                 socket.emit("log", res, data);
               }
             }
           );
-        } else {
-          db.close();
-          return false;
         }
       }
     });
@@ -63,24 +54,17 @@ io.sockets.on("connection", socket => {
     db.all(
       `SELECT pseudonyme FROM users WHERE pseudonyme='${res.pseudonyme}'`,
       (err, rows) => {
-        if (err) {
-          return false;
-        } else {
+        if (!err) {
           if (rows.length >= 1) {
             response.display[0] = true;
             socket.emit("responseInsert", response);
-            //db.close();
-            return false;
           } else {
             db.run(
               `INSERT INTO users (pseudonyme, password, token) VALUES ('${
                 res.pseudonyme
               }','${res.password}', '${randtoken(16)}')`,
               err => {
-                if (err) {
-                  db.close();
-                  return false;
-                } else {
+                if (!err) {
                   response.display[2] = true;
                   response.message = "You have been registred !";
                   response.textColor = "text-success";
@@ -106,10 +90,7 @@ io.sockets.on("connection", socket => {
         res.money
       }','${res.population}','${res.lat}','${res.lng}','etrher')`,
       err => {
-        if (err) {
-          db.close();
-          return false;
-        } else {
+        if (!err) {
           socket.emit("log", res.token, resp);
         }
       }
@@ -125,10 +106,7 @@ io.sockets.on("connection", socket => {
     db.run(
       `DELETE FROM favorites WHERE token='${token}' AND country='${country}'`,
       err => {
-        if (err) {
-          db.close();
-          return false;
-        } else {
+        if (!err) {
           socket.emit("log", token, supp);
         }
       }
@@ -159,10 +137,7 @@ io.sockets.on("connection", socket => {
     db.all(
       `SELECT country, flag, capital, continent, money, population, lat, lng, comment FROM favorites WHERE token='${token}' AND country='${country}'`,
       (err, data) => {
-        if (err) {
-          db.close();
-          return false;
-        } else {
+        if (!err) {
           socket.emit("recupFetch", data);
         }
       }
@@ -182,10 +157,7 @@ io.sockets.on("connection", socket => {
         res.pseudonyme
       }'`,
       (err, rows) => {
-        if (err) {
-          db.close();
-          return false;
-        } else {
+        if (!err) {
           if (rows.length == 1) {
             if (rows[0].password == res.password) {
               db.all(
@@ -193,10 +165,7 @@ io.sockets.on("connection", socket => {
                   rows[0].token
                 }'`,
                 (err, data) => {
-                  if (err) {
-                    db.close();
-                    return false;
-                  } else {
+                  if (!err) {
                     socket.emit("log", rows[0].token, data);
                   }
                 }
