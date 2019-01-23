@@ -1,7 +1,7 @@
 <template>
   <header class="row bg-dark bg-dark">
      <div class="col-xl-3 py-3 titleHeader"  @click="switchComponent('home')">
-       Lorem Ipsum !
+       Find your country !
      </div>
       <div class="col-xl-4 pr-5">
         <div class="row py-3 inputsGroupSearchHeader">
@@ -9,7 +9,7 @@
             <input type="text" class="w-100 my-1" placeholder="Tape a country" v-model="countrySearched" />
           </div>
           <div class="col-md-3">
-            <input type="submit" class="btn btn-success w-100" @click="sendSearch"/>
+            <input type="submit" value="search" class="btn btn-success w-100" @click="sendSearch"/>
           </div>
         </div>
        </div>
@@ -34,7 +34,7 @@
             <input type="submit" value="Sign on" class="btn btn-success w-100" @click="switchComponent('registration')" />
           </div>
           <div class="col-md-2 my-1 px-2" v-else>
-            <input type="submit" value="Deco" class="btn btn-success w-100" @click="switchComponent('disconnected')" />
+            <input type="submit" value="Log out" class="btn btn-success w-100" @click="switchComponent('disconnected')" />
           </div>
           
           </div>
