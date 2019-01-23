@@ -1,26 +1,26 @@
 <template>
   <section class="row body">
-    <div class="col-xl-4 containerDatas pb-5 bg-info" >
-      <div class="col-sm-8 pb-5">
-        <div class="col-12 text-center titleDatas"><span>{{ countrySelected.country }}</span></div>
+    <div class="col-xl-4 containerDatas" >
+      <div class="col-sm-8 pb-5 bg-light SquareDatas">
+        <div class="col-12 text-center pt-4 titleDatas"><span>{{ countrySelected.country }}</span></div>
         <div class="col-12">
-      <div class="col-12 py-4 border text-center">
+      <div class="col-12 borderBottom py-4 text-center">
         <img class="w-25" :src="this.countrySelected.flag" />
 
       </div>
-      <div class="col-12 border text-center">
+      <div class="col-12 borderBottom text-center">
         {{ countrySelected.capital }}
 
       </div>
-      <div class="col-12 border text-center">
+      <div class="col-12 borderBottom text-center">
         {{ countrySelected.region }}
 
       </div>
      
-      <div class="col-12 border text-center">
+      <div class="col-12 borderBottom text-center">
         {{ countrySelected.money }}
       </div>
-       <div class="col-12 border text-center">
+       <div class="col-12 borderBottom text-center">
          {{ countrySelected.population }}
       </div>
       </div>
@@ -29,11 +29,11 @@
         </div>   
       </div>
     </div>
-    <div class="col-xl-8 bg-success">
-      <div class="col-12 py-5 border containerMap">
-         <div id="map" class="border"></div>
+    <div class="col-xl-8">
+      <div class="col-12 py-5 containerMap">
+         <div id="map"></div>
       </div>
-      <div class="col-12 containerForm border">
+      <div class="col-12 containerForm">
        
       </div>
      </div>
@@ -50,7 +50,7 @@ export default {
   name: 'Home',
   props: {
     socketHome: Object,
-    favorites:Object,
+    favorites:Array,
     token:String,
     loged:Boolean
   },
@@ -81,7 +81,8 @@ export default {
   },
   mounted() {
     /* Connection to server created */
-    this.socketHome.on('resApi',(res)=>{
+        this.socketHome.on('resApi',(res, alreadyAdded)=>{
+        this.alreadyAdded=alreadyAdded;
         this.countrySelected.country=res[0].name;
         this.countrySelected.capital=res[0].capital;
         this.countrySelected.region=res[0].region;
@@ -108,13 +109,22 @@ export default {
     this.markerGroup = L.layerGroup().addTo(this.map);
     this.marker = L.marker([46,2]).addTo(this.markerGroup);
     this.map.setView([46,2], 1.5);
-  }
+  },
 }
 
 </script>
 
 
 <style scoped>
+
+.borderBottom{
+  border-bottom:1px black solid;
+}
+
+.SquareDatas
+{
+  border:2px black solid;
+}
 
 .titleDatas
 {
@@ -130,6 +140,8 @@ export default {
 
 .body {
  min-height:80vh;
+ background:url('background.jpg');
+ background-size:100% 100%;
 }
 
 .containerForm{
@@ -150,6 +162,7 @@ export default {
 {
   width:100%;
   height:90%;
+  border:2px black solid;
 }
 
 @media (max-width: 800px) {

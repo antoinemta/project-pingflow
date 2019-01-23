@@ -7,7 +7,7 @@
     <div class="col-12 px-5">
     <div class="row d-flex justify-content-center px-5">
 
-      <div class="col-xl-1 col-lg-2 col-md-3 col-sm-4 m-3 px-0 border" v-for="favorite in this.favorites">
+      <div class="col-xl-1 col-lg-2 col-md-3 col-sm-4 m-3 px-0 bg-light border" v-for="favorite in this.favorites">
         <div  class="col-12 py-2 p-3">
           <img :id="favorite.country" class="w-100" :src="favorite.flag"  @click="switchDetail"/>
         </div>
@@ -33,7 +33,7 @@ export default {
   props: {
     socketFavorites: Object,
     logVue: Boolean,
-    favorites:Object,
+    favorites:Array,
     token:String
   },
   methods:{
@@ -41,7 +41,7 @@ export default {
       this.socketFavorites.emit('deleteCountry',event.target.id,this.favorites,this.token)
     },
     switchDetail:function(event){ 
-      this.$emit('switchDetail',event.target.id);
+      this.socketFavorites.emit('fetchCountry',event.target.id,this.token);
     }  
   }
 }
@@ -54,6 +54,8 @@ export default {
 
 .body {
  min-height:80vh;
+ background:url('background.jpg');
+ background-size:100% 100%;
 }
 
 .titleFavoritesPage{
@@ -64,5 +66,7 @@ export default {
   word-wrap:break-word;
   text-align:center;
 }
+
+
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <Detail :token="token" :country="country"  :socketDetail="socketBody" v-if="this.actifComponent=== 'detail'"/>
+  <Detail :countrySelected="countrySelected" :token="token" :country="country"  :socketDetail="socketBody" v-if="this.actifComponent=== 'detail'"/>
   <Home :token="token" :loged="loged" :favorites="favorites" :socketHome="socketBody" v-else-if="this.actifComponent=== 'home'" />
   <Favorites :token="token" :favorites="favorites" :socketFavorites="socketBody" @switchDetail="switchDetail" v-else-if="this.actifComponent==='favorites'" />
   <Registration :socketRegistration="socketBody" v-else/>
@@ -8,7 +8,6 @@
 
 
 <script>
-
 
 import Home from './Home.vue'
 import Registration from './Registration.vue'
@@ -28,23 +27,22 @@ export default {
     socketBody: Object,
     logVue: Boolean,
     loged:Boolean,
-    favorites:Object,
+    favorites:Array,
     token:String,
-    actifComponent:String
+    actifComponent:String,
+    countrySelected:Object
   },
   data(){return{
       country:""
     }
   },
-  methods:{
-    switchDetail:function (event) {
-      this.$emit('switchComponent','detail');
-      this.country=event;
-      }
-      
+  mounted(){
+    
   }
+
 }
 </script>
+
 
 
 <style scoped>

@@ -29,13 +29,28 @@ io.sockets.on("connection", socket => {
     return true;
   });
 
-  socket.on("countrySearched", res => {
+  socket.on("countrySearched", (res, alreadyAdded) => {
+    let db = new sqlite3.Database("./findyourcountry.db");
     axios({
       method: "get",
       url: `https://restcountries.eu/rest/v2/name/${res}`
     })
       .then(resApi => {
-        socket.emit("resApi", resApi.data);
+        db.all(
+          `SELECT country FROM favorites WHERE country='${res}'`,
+          (err, data) => {
+            if (!err) {
+              if (data.length >= 1) {
+                alreadyAdded = true;
+                socket.emit("resApi", resApi.data, alreadyAdded);
+              } else {
+                alreadyAdded = false;
+                socket.emit("resApi", resApi.data, alreadyAdded);
+              }
+            }
+          }
+        );
+        db.close();
         return true;
       })
       .catch(() => {
@@ -81,20 +96,17 @@ io.sockets.on("connection", socket => {
   });
 
   socket.on("addCountry", resp => {
-    let res = resp[resp.length - 1];
-    console.log(res);
     let db = new sqlite3.Database("./findyourcountry.db");
+    let res = resp[resp.length - 1];
     db.run(
       `INSERT INTO favorites (token, country, flag, capital, continent, money, population, lat, lng, comment) VALUES ('${
         res.token
-      }','${res.country}', '${res.flag}','${res.capital}','${res.continent}','${
+      }','${res.country}', '${res.flag}','${res.capital}','${res.region}','${
         res.money
       }','${res.population}','${res.lat}','${res.lng}','')`,
       err => {
         if (!err) {
           socket.emit("log", res.token, resp);
-        } else {
-          console.log(err);
         }
       }
     );
@@ -125,6 +137,7 @@ io.sockets.on("connection", socket => {
       err => {
         if (err) {
           db.close();
+
           return false;
         } else {
           db.close();
@@ -136,12 +149,11 @@ io.sockets.on("connection", socket => {
 
   socket.on("fetchCountry", (country, token) => {
     let db = new sqlite3.Database("./findyourcountry.db");
-
     db.all(
       `SELECT country, flag, capital, continent, money, population, lat, lng, comment FROM favorites WHERE token='${token}' AND country='${country}'`,
       (err, data) => {
         if (!err) {
-          socket.emit("recupFetch", data);
+          socket.emit("recupFetch", data[0]);
         }
       }
     );

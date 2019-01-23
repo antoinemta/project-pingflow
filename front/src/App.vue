@@ -4,7 +4,8 @@
       :socketHeader="socket"
       @switchComponent="switchComponent" />
       <Body :actifComponent="actifComponent" 
-      @switchComponent="switchComponent" 
+      @switchComponent="switchComponent"
+      :countrySelected="countrySelected"
       :socketBody="socket" 
       :loged="loged" 
       :favorites="favorites" 
@@ -37,20 +38,23 @@ export default {
       loged: false,
       token: token,
       favorites:[],
-      actifComponent:"home"
+      actifComponent:"home",
+      countrySelected:{}
     }
   }
   ,
   methods:{
 
     switchComponent:function(event){
-
       if (event=='disconnected'){
+        this.actifComponent='disconnected'
         this.loged=false;
         this.favorites=[];
         localStorage.removeItem('token');
       }
+      else{
       this.actifComponent=event;
+    }
     }
     
   }
@@ -67,6 +71,13 @@ export default {
     this.token=token;
   });
     
+
+  this.socket.on('recupFetch',(data)=>{
+      this.actifComponent='detail'
+      this.countrySelected=data;
+
+    });
+
   }
 }
 </script>

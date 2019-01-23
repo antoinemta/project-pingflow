@@ -1,7 +1,7 @@
 <template>
   <section class="row body">
    <div class="col-12 containerInputs">
-    <div class="col-xl-3 col-md-6 border">
+    <div class="col-xl-3 bg-light col-md-6 border">
       <div class="col-12 text-center pt-3 titleContainerInputs">
       Sign on
     </div>
@@ -85,5 +85,7 @@ export default {
 
 .body {
  min-height:80vh;
+ background:url('background.jpg');
+ background-size:100% 100%;
 }
 </style>
