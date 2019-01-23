@@ -1,10 +1,9 @@
 <template>
   <section class="row body">
-  <div class="col-12 inputsGroupLog">
-
+   <div class="col-12 containerInputs">
     <div class="col-xl-3 col-md-6 border">
-      <div class="col-12 text-center">
-      Lorem Ipsum
+      <div class="col-12 text-center pt-3 titleContainerInputs">
+      Sign on
     </div>
     <div class="col-12 text-center py-3 px-5">
       <input type="text" class="w-100" v-model="user.pseudonyme" />
@@ -19,19 +18,16 @@
     </div>
     <div :class="'col-12 text-center ' +response.textColor" v-if="response.display[2]">{{ response.message }}</div>
     <div class="col-12 text-center py-3 px-5">
-      <button @click="sendLog">connection</button>
+      <button class="btn btn-info" @click="sendRegister">connection</button>
     </div>
-  </div>
-</div> 
+   </div>
+  </div> 
  </section>
 </template>
 
 
 
 <script>
-
-
-
 export default {
 
   name: 'Registration',
@@ -51,10 +47,9 @@ export default {
     }
     }
   }
-
   ,
   methods:{
-      sendLog:function() {
+      sendRegister:function() {
         if (this.user.password==this.user.passwordVerif){
           this.socketRegistration.emit('sendLog',this.user);
       }
@@ -63,96 +58,32 @@ export default {
         this.response.textColor="text-danger";
         this.response.message="passwords differents";
       }
-      }
+    }
     
   },
   mounted(){
     this.socketRegistration.on('responseInsert',(res)=>{
-
-      this.response=res;
+        this.response=res;
     });
   }
 
 }
-
-
 </script>
 
 
 <style scoped>
-
-
-.inputsGroupLog{
+.containerInputs{
   display:flex;
   justify-content:center;
   align-items:center;
 }
 
-.titleLeft
-{
-  padding-bottom:11vh;
-}
-
-.titleFavoritesPage{
-  font-size:2.5em;
+.titleContainerInputs{
   font-weight:bold;
-}
-
-.infosSearchedBody
-{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.contentBlockFavorite{
-  word-wrap:break-word;
-  text-align:center;
-}
-
-.textAlignCenter{
-  text-align:center;
+  font-size:1.3em;
 }
 
 .body {
  min-height:80vh;
 }
-
-.containerForm{
-  padding-left:6%;
-  padding-right:6%;
-  height:40%;
-}
-
-.containerMap{
-  height:60%;
-  display:flex;
-  align-items:center;
-  padding-left:17%;
-  padding-right:17%;
-
-}
-.containerLogin{
-
-  display:flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#map
-{
-  width:100%;
-  height:90%;
-}
-
-@media (max-width: 800px) {
-  .containerForm{
-    height: 40vh;
-  }
-
-  .containerMap{
-    height:60vh;
-  }
-}
-
 </style>

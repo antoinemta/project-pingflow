@@ -69,7 +69,7 @@ io.sockets.on("connection", socket => {
           if (rows.length >= 1) {
             response.display[0] = true;
             socket.emit("responseInsert", response);
-            db.close();
+            //db.close();
             return false;
           } else {
             db.run(
