@@ -1,35 +1,32 @@
 <template>
   <section class="row body">
-    <div class="col-xl-4 infosSearchedBody pb-5 bg-info" >
+    <div class="col-xl-4 containerDatas pb-5 bg-info" >
       <div class="col-sm-8 pb-5">
-        <div class="col-12 text-center titleLeft"><span>{{ countrySelec.country }}</span></div>
+        <div class="col-12 text-center titleDatas"><span>{{ countrySelected.country }}</span></div>
         <div class="col-12">
       <div class="col-12 py-4 border text-center">
-        <img class="w-25" :src="this.countrySelec.flag" />
+        <img class="w-25" :src="this.countrySelected.flag" />
 
       </div>
       <div class="col-12 border text-center">
-        {{ countrySelec.capital }}
+        {{ countrySelected.capital }}
 
       </div>
       <div class="col-12 border text-center">
-        {{ countrySelec.region }}
+        {{ countrySelected.region }}
 
       </div>
      
       <div class="col-12 border text-center">
-        {{ countrySelec.money }}
+        {{ countrySelected.money }}
       </div>
        <div class="col-12 border text-center">
-         {{ countrySelec.population }}
+         {{ countrySelected.population }}
       </div>
       </div>
       <div class="col-12 pb-5 d-flex justify-content-center">
-          <button class="btn btn-success w-50 mt-4" @click="addCountry" v-if="this.loged">add</button>
-        </div>
-        <div class="col-12 text-danger pb-5 d-flex justify-content-center" v-if="alreadyAdded">
-          Already added.
-        </div>    
+          <button class="btn btn-success w-50 mt-4" @click="addData" v-if="this.loged && !this.alreadyAdded">add</button>
+        </div>   
       </div>
     </div>
     <div class="col-xl-8 bg-success">
@@ -59,7 +56,7 @@ export default {
   },
   data(){return{
     alreadyAdded:false,
-    countrySelec:{
+    countrySelected:{
     token:this.token,
     country:"------",
     capital:"------",
@@ -68,44 +65,34 @@ export default {
     money:"------",
     flag:"------",
     lat:0,
-    lng:0},
+    lng:0
+    },
     map:null,
     markerGroup:null,
     marker:null
-    
     }
   },
   methods:{
-      initMap:function () {
-
-      /* This is an calling to server to recup the data */
-      
-    },
-    addCountry:function(){
-     if (this.favorites.filter(country => country.country==this.countrySelec.country).length==0)
-     {
-       this.favorites.push(this.countrySelec);
+    addData:function(){
+       this.favorites.push(this.countrySelected);
        this.socketHome.emit('addCountry',this.favorites);
-     }
-     else{
        this.alreadyAdded=true
-     }
     }
   },
   mounted() {
     /* Connection to server created */
     this.socketHome.on('resApi',(res)=>{
-        this.countrySelec.country=res[0].name;
-        this.countrySelec.capital=res[0].capital;
-        this.countrySelec.region=res[0].region;
-        this.countrySelec.population=res[0].population;
-        this.countrySelec.money=res[0].currencies[0].name;
-        this.countrySelec.flag=res[0].flag;
-        this.countrySelec.lat=res[0].latlng[0];
-        this.countrySelec.lng=res[0].latlng[1];
+        this.countrySelected.country=res[0].name;
+        this.countrySelected.capital=res[0].capital;
+        this.countrySelected.region=res[0].region;
+        this.countrySelected.population=res[0].population;
+        this.countrySelected.money=res[0].currencies[0].name;
+        this.countrySelected.flag=res[0].flag;
+        this.countrySelected.lat=res[0].latlng[0];
+        this.countrySelected.lng=res[0].latlng[1];
         this.markerGroup.removeLayer(this.marker);
-        this.marker = L.marker([this.countrySelec.lat,this.countrySelec.lng]).addTo(this.markerGroup);
-        this.map.setView([this.countrySelec.lat,this.countrySelec.lng], 1.5);
+        this.marker = L.marker([this.countrySelected.lat,this.countrySelected.lng]).addTo(this.markerGroup);
+        this.map.setView([this.countrySelected.lat,this.countrySelected.lng], 1.5);
     });
     
 
@@ -121,11 +108,7 @@ export default {
     this.markerGroup = L.layerGroup().addTo(this.map);
     this.marker = L.marker([46,2]).addTo(this.markerGroup);
     this.map.setView([46,2], 1.5);
-  },
-  updated(){
-     this.initMap()
   }
-
 }
 
 </script>
@@ -133,37 +116,16 @@ export default {
 
 <style scoped>
 
-
-.inputsGroupLog{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.titleLeft
+.titleDatas
 {
   padding-bottom:11vh;
 }
 
-.titleFavoritesPage{
-  font-size:2.5em;
-  font-weight:bold;
-}
-
-.infosSearchedBody
+.containerDatas
 {
   display:flex;
   justify-content:center;
   align-items:center;
-}
-
-.contentBlockFavorite{
-  word-wrap:break-word;
-  text-align:center;
-}
-
-.textAlignCenter{
-  text-align:center;
 }
 
 .body {
@@ -182,13 +144,6 @@ export default {
   align-items:center;
   padding-left:17%;
   padding-right:17%;
-
-}
-.containerLogin{
-
-  display:flex;
-  justify-content: center;
-  align-items: center;
 }
 
 #map
