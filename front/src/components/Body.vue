@@ -42,21 +42,10 @@ export default {
       this.country=event;
       }
       
-  },
-  mounted() {
-
-  },
-  updated(){
-     
   }
-
 }
-
-
 </script>
 
 
 <style scoped>
-
-
 </style>
