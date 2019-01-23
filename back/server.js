@@ -82,16 +82,19 @@ io.sockets.on("connection", socket => {
 
   socket.on("addCountry", resp => {
     let res = resp[resp.length - 1];
+    console.log(res);
     let db = new sqlite3.Database("./findyourcountry.db");
     db.run(
       `INSERT INTO favorites (token, country, flag, capital, continent, money, population, lat, lng, comment) VALUES ('${
         res.token
       }','${res.country}', '${res.flag}','${res.capital}','${res.continent}','${
         res.money
-      }','${res.population}','${res.lat}','${res.lng}','etrher')`,
+      }','${res.population}','${res.lat}','${res.lng}','')`,
       err => {
         if (!err) {
           socket.emit("log", res.token, resp);
+        } else {
+          console.log(err);
         }
       }
     );
